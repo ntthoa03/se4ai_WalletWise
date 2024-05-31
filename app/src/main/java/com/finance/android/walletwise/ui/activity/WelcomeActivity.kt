@@ -33,9 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 //Import UI file
-import com.finance.android.walletwise.ui.theme.WalletWiseTheme
+import com.finance.android.walletwise.ui.theme.*
 import com.finance.android.walletwise.R
-import com.finance.android.walletwise.ui.viewmodel.WelcomeViewModel
 
 //Show Screen
 //class WelcomeActivity : ComponentActivity() {
@@ -54,9 +53,9 @@ import com.finance.android.walletwise.ui.viewmodel.WelcomeViewModel
 
 //@Preview(showBackground = true)
 @Composable
-fun WelcomeScreen(navController: NavController,
-                  onSignUpClick: () -> Unit,
-                  onLoginClick: () -> Unit)
+fun WelcomeScreen(
+    onLoginClick:  () -> Unit,
+    onSignupClick: () -> Unit )
 {
     val configuration = LocalConfiguration.current
     val screenWidth   = configuration.screenWidthDp
@@ -103,7 +102,7 @@ fun WelcomeScreen(navController: NavController,
             {
                 //Start Journey button
                 Button(
-                    onClick = { onSignUpClick() },
+                    onClick = { onSignupClick() },
                     colors = ButtonDefaults.buttonColors(colorResource(id = R.color.md_theme_primary)),
                     modifier = Modifier
                         .weight(0.7f)

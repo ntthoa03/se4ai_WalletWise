@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">WalletWise</string>
+    <string name="app_name" translatable="false">WalletWise</string>
     <string name="user_agreement">By continuing, you agree to the User Agreement,\n its policies, and the Privacy Policy.</string>
 </resources>

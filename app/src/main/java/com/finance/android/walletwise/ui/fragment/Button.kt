@@ -19,15 +19,15 @@ fun NormalButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     backgroundColor: Color = colorResource(id = R.color.md_theme_primary),
-    contentColor: Color = colorResource(id = R.color.white)
-) {
+    contentColor: Color = colorResource(id = R.color.white) )
+{
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(backgroundColor, contentColor = contentColor),
-        shape = RoundedCornerShape(50.dp)
-    ) {
+        shape = RoundedCornerShape(50.dp) )
+    {
         Text(text = text)
     }
 }

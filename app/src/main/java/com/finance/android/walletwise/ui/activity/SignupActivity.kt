@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.finance.android.walletwise.R
-import com.finance.android.walletwise.ui.theme.WalletWiseTheme
+import com.finance.android.walletwise.ui.theme.*
 
 //class SignupActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +45,7 @@ import com.finance.android.walletwise.ui.theme.WalletWiseTheme
 
 //@Preview(showBackground = true)
 @Composable
-fun SignupScreen(navController: NavController)
+fun SignupScreen()
 {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
