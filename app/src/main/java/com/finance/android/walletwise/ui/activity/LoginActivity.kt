@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,21 +29,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.finance.android.walletwise.R
+import com.finance.android.walletwise.WalletWiseTheme
+import com.finance.android.walletwise.ui.fragment.PasswordField
 import com.finance.android.walletwise.ui.theme.*
 
-//class LoginActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            WalletWiseTheme {
-//                LoginScreen()
-//            }
-//        }
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun PreviewLoginScreen() {
+    WalletWiseTheme {
+        LoginScreen(
+            onNextLogin = {}
+        )
+    }
+}
 
 @Composable
-fun LoginScreen()
+fun LoginScreen(
+    onNextLogin: () -> Unit, )
 {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -63,9 +66,8 @@ fun LoginScreen()
         {
             Image(
                 painter = painterResource(R.drawable.application_logo),
-                contentDescription = "App Logo",
+                contentDescription = "Application Logo",
                 modifier = Modifier
-                    //.size((screenWidth*0.4).dp)
                     .padding(bottom = 8.dp))
         }
 
@@ -81,7 +83,7 @@ fun LoginScreen()
 
             Text(
                 text = "Login",
-                fontSize = 36.sp,
+                style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.padding(bottom = 16.dp))
         }
 
@@ -99,19 +101,10 @@ fun LoginScreen()
                 label = "Username",
                 modifier = Modifier.fillMaxWidth())
 
-            NormalTextField(
+            PasswordField(
                 value = password,
                 onValueChange = { password = it },
-                label = "Password",
-                isPassword = !showPassword, // Toggle password visibility
-//            trailingIcon = {
-//                IconButton(onClick = { showPassword = !showPassword }) {
-//                    Icon(
-//                        imageVector = if (showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-//                        contentDescription = if (showPassword) "Hide password" else "Show password"
-//                    )
-//                }
-//            }
+                label = "Password"
             )
         }
 
@@ -126,11 +119,11 @@ fun LoginScreen()
         {
             NormalButton(
                 text = "Next",
-                onClick = { /* TODO */ },
+                onClick = onNextLogin,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
-            )
+                    .height(50.dp),
+                enabled = username.isNotEmpty() && password.isNotEmpty())
         }
     }
 }

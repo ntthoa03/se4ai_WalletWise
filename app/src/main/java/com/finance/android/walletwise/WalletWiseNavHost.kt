@@ -47,7 +47,9 @@ fun WalletWiseNavHost(
         //LoginScreen
         composable(route = loginScreen.route)
         {
-            LoginScreen()
+            LoginScreen(
+                onNextLogin = { /* TODO */ }
+            )
         }
 
         //SignupScreen

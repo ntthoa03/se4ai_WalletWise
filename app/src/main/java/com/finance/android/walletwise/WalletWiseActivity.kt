@@ -44,37 +44,3 @@ fun WalletWiseApplication()
             modifier = Modifier)
     }
 }
-
-
-//class WalletWiseActivity : ComponentActivity()
-//{
-//    override fun onCreate(savedInstanceState: Bundle?)
-//    {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            WalletWiseTheme {
-//                //Create MainViewModel instance
-//                val viewModel = MainViewModel(this)
-//                val navController = rememberNavController()
-//
-//                //Observe the navigateToScreen state flow
-//                val currentScreen by viewModel.navigateToScreen.collectAsState()
-//
-//                //Use NavHost to manage navigation
-//                NavHost(navController = navController, startDestination = currentScreen.name) {
-//
-//                    composable(Screen.Welcome.name)
-//                    {
-//                        WelcomeScreen(
-//                            navController = navController,
-//                            onSignUpClick = { navController.navigate("signup") },
-//                            onLoginClick = { navController.navigate("login") }
-//                        )
-//                    }
-//                    composable(Screen.SignUp.name) { SignupScreen(navController) }
-//                    composable(Screen.Login.name) { LoginScreen(navController) }
-//                }
-//            }
-//        }
-//    }
-//}
