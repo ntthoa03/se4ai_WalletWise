@@ -1,9 +1,12 @@
 package com.finance.android.walletwise
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
@@ -14,26 +17,45 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.finance.android.walletwise.model.UserPreferences
 import com.finance.android.walletwise.ui.activity.*
+import com.finance.android.walletwise.ui.viewmodel.AuthenticationViewModel
+import com.finance.android.walletwise.ui.viewmodel.PinViewModel
+import com.finance.android.walletwise.ui.viewmodel.UserProfileViewModel
 
-//Control Screen navigation with NavHost
+//Control application navigation with NavHost
 @Composable
 fun WalletWiseNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier )
+    modifier: Modifier = Modifier,
+    authenticationViewModel: AuthenticationViewModel? = null,
+    userProfileViewModel: UserProfileViewModel? = null,
+    pinViewModel: PinViewModel? = null,)
 {
     val context = LocalContext.current
     var startDestination by rememberSaveable { mutableStateOf(
-        if (UserPreferences.isFirstTimeLaunch(context)) welcomeScreen.route else loginScreen.route) }
+        if (UserPreferences.isFirstTimeLaunch(context)) welcomeScreen.route else pinVerificationScreen.route) }
 
     NavHost(
         navController = navController,
-        startDestination = startDestination, //welcomeScreen.route,
-        modifier = modifier )
+        startDestination = startDestination,
+        modifier = modifier, )
     {
-        /* ============================== Welcome ============================== */
-
-        //WelcomeScreen
-        composable(route = welcomeScreen.route)
+        /**
+         * WELCOME =================================================================================
+         */
+        //WelcomeScreen ----------------------------------------------------------------------------
+        composable(
+            route = welcomeScreen.route,
+            enterTransition = {
+                return@composable fadeIn(tween(300))  //Open Animation
+            },
+            exitTransition = {
+                return@composable fadeOut(tween(300)) //Close Animation
+            },
+            popEnterTransition = {
+                return@composable slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300))       //Re-open Animation
+            }, )
         {
             WelcomeScreen(
                 onLoginClick = {
@@ -43,19 +65,124 @@ fun WalletWiseNavHost(
                     navController.navigateSingleTopTo(signupScreen.route) }
             )
         }
-
-        //LoginScreen
-        composable(route = loginScreen.route)
+        //LoginScreen ------------------------------------------------------------------------------
+        composable(
+            route = loginScreen.route,
+            enterTransition = {
+                return@composable slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(300), )     //Open Animation
+            },
+            exitTransition = {
+                return@composable fadeOut(tween(300)) //Close Animation
+            },
+            popEnterTransition = {
+                return@composable slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300))       //Re-open Animation
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300))       //Back Animation
+            }, )
         {
             LoginScreen(
-                onNextLogin = { /* TODO */ }
+                onSignUpClick = {
+                    navController.navigateSingleTopTo(signupScreen.route)
+                },
+                navigateToHome = {
+                    navController.navigateSingleTopTo(homeScreen.route)
+                },
+                authenticationViewModel = authenticationViewModel,
+            )
+        }
+        //SignupScreen -----------------------------------------------------------------------------
+        composable(
+            route = signupScreen.route,
+            enterTransition = {
+                return@composable slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(300), )     //Open Animation
+            },
+            exitTransition = {
+                return@composable fadeOut(tween(300)) //Close Animation
+            },
+            popEnterTransition = {
+                return@composable slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300))       //Re-open Animation
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300))       //Back Animation
+            }, )
+        {
+            SignupScreen(
+                navigateToProfile = {
+                    navController.navigateSingleTopTo(profileSetupScreen.route)
+                },
+                onLoginClick = {
+                    navController.navigateSingleTopTo(loginScreen.route)
+                },
+                authenticationViewModel = authenticationViewModel,
             )
         }
 
-        //SignupScreen
-        composable(route = signupScreen.route)
+        /**
+         * SETUP PROFILE ===========================================================================
+         */
+        //SetupProfileScreen
+        composable(
+            route = profileSetupScreen.route,
+            enterTransition = {
+                return@composable fadeIn(tween(300))
+            },
+            exitTransition = {
+                return@composable fadeOut(tween(300))
+            },
+            popEnterTransition = {
+                return@composable slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300)
+                )
+            }, )
         {
-            SignupScreen()
+            ProfileSetupScreen(
+                navigateToHome = {
+                    navController.navigateSingleTopTo(pinSetupScreen.route)
+                },
+                userProfileViewModel = userProfileViewModel,
+            )
+        }
+        //SetupPinScreen
+        composable(route = pinSetupScreen.route)
+        {
+            SetupPinScreen(
+                onNavigateHome = {
+                    navController.navigateSingleTopTo(pinVerificationScreen.route)
+                },
+                pinViewModel = pinViewModel,
+            )
+        }
+        /**
+         * HOME ====================================================================================
+         */
+        //EnterPinScreen
+        composable(route = pinVerificationScreen.route)
+        {
+            EnterPinScreen(
+                onNavigateHome = {
+                    navController.navigateSingleTopTo(homeScreen.route)
+                },
+                pinViewModel = pinViewModel,
+            )
+        }
+        //HomeScreen
+        composable(route = homeScreen.route)
+        {
+            HomeScreen()
         }
     }
 }

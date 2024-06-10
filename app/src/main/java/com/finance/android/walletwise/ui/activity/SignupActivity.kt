@@ -5,172 +5,234 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.finance.android.walletwise.ui.fragment.NormalTextField
 import com.finance.android.walletwise.ui.fragment.NormalButton
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.finance.android.walletwise.R
 import com.finance.android.walletwise.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.PasswordField
-import com.finance.android.walletwise.ui.theme.*
+import com.finance.android.walletwise.ui.viewmodel.AuthenticationViewModel
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewSignupScreen() {
     WalletWiseTheme {
-        SignupScreen()
+        SignupScreen(
+            authenticationViewModel = null,
+        )
     }
 }
 
 @Composable
 fun SignupScreen(
-    onNextSignup: () -> Unit = {},
+    authenticationViewModel: AuthenticationViewModel? = null,
+    navigateToProfile: () -> Unit = {},
     onLoginClick: () -> Unit = {}, )
 {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf<String?>(null) }
+    val authenticationUiState = authenticationViewModel?.authenticationUiState
+    val isError = authenticationUiState?.errorSignup != null
+    val context = LocalContext.current
 
-    WalletWiseTheme {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background))
+    val configuration = LocalConfiguration.current
+    val screenHeight   = configuration.screenHeightDp
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(0.dp), )
+    {
+        //LOGO
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopCenter)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start )
         {
-            //Logo
-            Column(
+            Image(
+                painter = painterResource(R.drawable.application_logo),
+                contentDescription = "App Logo",
                 modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.TopCenter)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start )
+                    .padding(bottom = 8.dp), )
+        }
+
+        /**
+         * SIGN UP FORM
+         */
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally)
+        {
+            Text(
+                text = "Sign Up",
+                style = MaterialTheme.typography.headlineLarge, )
+
+            Spacer(modifier = Modifier.height((screenHeight*0.05).dp))
+
+            //Username
+            NormalTextField(
+                value = authenticationUiState?.usernameSignup ?: "",
+                onValueChange = { authenticationViewModel?.onUsernameSignupChange(it) },
+                label = "Username",
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Username",)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                isError = isError,
+            )
+
+            Spacer(modifier = Modifier.height((screenHeight*0.005).dp))
+
+            //Password Field
+            PasswordField(
+                value = authenticationUiState?.passwordSignup ?: "",
+                onValueChange = { authenticationViewModel?.onPasswordSignupChange(it) },
+                label = "Password",
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "Password",)
+                },
+                isError = isError,
+            )
+
+            Spacer(modifier = Modifier.height((screenHeight*0.005).dp))
+
+            //Confirm Password Field
+            PasswordField(
+                value = authenticationUiState?.confirmPasswordSignup ?: "",
+                onValueChange = { authenticationViewModel?.onConfirmPasswordSignupChange(it) },
+                label = "Confirm Password",
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "Password",)
+                },
+                isError = isError,
+            )
+
+            //Error Lines
+            Box(modifier = Modifier)
             {
-                Image(
-                    painter = painterResource(R.drawable.application_logo),
-                    contentDescription = "App Logo",
-                    modifier = Modifier
-                        //.size((screenWidth*0.4).dp)
-                        .padding(bottom = 8.dp))
-            }
-
-            //Sign-up Text
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally)
-            {
-                Spacer(modifier = Modifier.height(100.dp))
-
-                Text(
-                    text = "Sign Up",
-                    fontSize = 36.sp,
-                    modifier = Modifier.padding(bottom = 16.dp))
-            }
-
-            //Sign-up Section
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally)
-            {
-                //Username
-                NormalTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = "Username",
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                //Password Field
-                PasswordField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = "Password",
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                //Confirm Password Field
-                PasswordField(
-                    value = confirmPassword,
-                    onValueChange = { confirmPassword = it },
-                    label = "Confirm Password",
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                if (password != confirmPassword) {
+                if (isError)
+                {
                     Text(
-                        text = "Passwords do not match",
+                        text = authenticationUiState?.errorSignup ?: "Unknown Error",
                         color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(start = 16.dp), )
                 }
-            }
 
+                Spacer(modifier = Modifier.height((screenHeight * 0.2).dp))
+            }
+        }
+
+        /**
+         * BUTTONS
+         */
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.Center)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally)
+        {
             //Button
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.Center)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally)
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center)
             {
-                //Next button
+                //Loading
+                if (authenticationUiState?.isLoading == true)
+                {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(bottom = 8.dp),
+                        strokeWidth = 4.dp,
+                    )
+                }
+
+                //Button
                 NormalButton(
                     text = "Next",
                     onClick = {
-                        if (password == confirmPassword) {
-                            onNextSignup()
-                        }
+                        authenticationViewModel?.createUser(context)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    enabled = username.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank() && password == confirmPassword)
+                    enabled = authenticationUiState?.isLoading != true && (authenticationUiState?.usernameSignup != null && authenticationUiState?.passwordSignup != null && authenticationUiState?.confirmPasswordSignup != null)
+                )
+            }
 
-                //Already have an account? -> Login button
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically)
+            //Already have an account? -> Login text button
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically)
+            {
+                Text(
+                    text = "Already have an account?",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(0.dp), )
+
+                TextButton(
+                    onClick = onLoginClick,
+                    modifier = Modifier.padding(0.dp), )
                 {
-                    Text("Already have an account?")
-                    TextButton(onClick = onLoginClick)
-                    {
-                        Text("Log in")
-                    }
+                    Text(
+                        text = "Log in",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(0.dp), )
                 }
             }
+
+            LaunchedEffect(key1 = authenticationViewModel?.hasUser)
+            {
+                if (authenticationViewModel?.hasUser == true)
+                {
+                    navigateToProfile()
+                }
+            }
+
         }
     }
 }

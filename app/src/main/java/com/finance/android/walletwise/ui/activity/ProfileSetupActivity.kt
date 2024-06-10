@@ -1,5 +1,6 @@
 package com.finance.android.walletwise.ui.activity
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,16 +13,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,35 +32,44 @@ import com.finance.android.walletwise.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.DropDownMenu
 import com.finance.android.walletwise.ui.fragment.NormalButton
 import com.finance.android.walletwise.ui.fragment.NormalTextField
+import com.finance.android.walletwise.ui.viewmodel.UserProfileUiState
+import com.finance.android.walletwise.ui.viewmodel.UserProfileViewModel
+import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewProfileSetupScreen() {
     WalletWiseTheme {
-        ProfileSetupScreen(
-            onNextProfile = {}
-        )
+        ProfileSetupScreen()
     }
 }
 
 @Composable
 fun ProfileSetupScreen(
-    onNextProfile: () -> Unit, )
+    userProfileViewModel: UserProfileViewModel? = null,
+    navigateToHome: () -> Unit = {}, )
 {
-    var name by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
-    var emailAddress by remember { mutableStateOf("") }
-    var currency by remember { mutableStateOf("") }
+    val userProfileUiState = userProfileViewModel?.userProfileUiState ?: UserProfileUiState()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    val isFormNotBlank = userProfileUiState.fullName.isNotBlank() &&
+                            userProfileUiState.gender.isNotBlank() &&
+                            userProfileUiState.age != 0 &&
+                            userProfileUiState.phoneNumber.isNotBlank() &&
+                            userProfileUiState.currency.isNotBlank()
+
+    val configuration = LocalConfiguration.current
+    val screenHeight   = configuration.screenHeightDp
+
     val genders = listOf("Male", "Female", "Other")
-    val currencies = listOf("USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "CNY")
+    val currencies = listOf("VND", "USD", "EUR")
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(colorResource(id = R.color.md_theme_background)))
+        .background(MaterialTheme.colorScheme.background), )
     {
-        //Logo
+        //LOGO
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,28 +82,12 @@ fun ProfileSetupScreen(
                 painter = painterResource(R.drawable.application_logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
-                    //.size((screenWidth*0.4).dp)
                     .padding(bottom = 8.dp))
         }
 
-        //Setup Profile text
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally)
-        {
-            Spacer(modifier = Modifier.height(100.dp))
-
-            Text(
-                text = "Set up your profile",
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-        }
-
-        //Setup Profile Form
+        /**
+         * User Profile Form
+         */
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -101,56 +95,62 @@ fun ProfileSetupScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally)
         {
-            //Your name
-            NormalTextField(value = name, onValueChange = { name = it }, label = "Your name")
+            //Set up your profile text
+            Text(
+                text = "Set up your profile",
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(bottom = 16.dp), )
+
+            Spacer(modifier = Modifier.height((screenHeight * 0.05).dp))
+
+            //Your name ----------------------------------------------------------------------------
+            NormalTextField(
+                value = userProfileUiState.fullName,
+                onValueChange = { userProfileViewModel?.onFullNameChanged(it) },
+                label = "Your name")
 
             //Gender and Age section
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp))
             {
-                //Gender
+                //Gender ---------------------------------------------------------------------------
                 Box(
                     modifier = Modifier.weight(1f))
                 {
                     DropDownMenu(
                         options = genders,
-                        selectedOption = gender,
-                        onOptionSelected = { gender = it },
+                        value = userProfileUiState.gender,
+                        onOptionSelected = { userProfileViewModel?.onGenderChanged(it) },
                         label = "Gender")
                 }
 
-                //Age
+                //Age ------------------------------------------------------------------------------
                 Box(modifier = Modifier.weight(1f))
                 {
                     NormalTextField(
-                        value = age,
-                        onValueChange = { age = it },
+                        value = if (userProfileUiState.age != 0) (userProfileUiState.age).toString() else "",
+                        onValueChange = { userProfileViewModel?.onAgeChanged(it.toIntOrNull() ?: 0) },
                         label = "Age",
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone))
                 }
             }
 
-            //Phone number
+            //Phone number -------------------------------------------------------------------------
             NormalTextField(
-                value = phoneNumber,
-                onValueChange = { phoneNumber = it },
+                value = userProfileUiState.phoneNumber,
+                onValueChange = { userProfileViewModel?.onPhoneNumberChanged(it) },
                 label = "Phone number",
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone))
 
-            //Email address
-            NormalTextField(
-                value = emailAddress,
-                onValueChange = { emailAddress = it },
-                label = "Email address",
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email))
-
-            //Currency
+            //Currency -----------------------------------------------------------------------------
             DropDownMenu(
                 options = currencies,
-                selectedOption = "",
-                onOptionSelected = {currency = it},
+                value = userProfileUiState.currency,
+                onOptionSelected = { userProfileViewModel?.onCurrencyChanged(it) },
                 label = "Currency")
+
+            Spacer(modifier = Modifier.height((screenHeight * 0.1).dp))
         }
 
         //Button
@@ -160,15 +160,39 @@ fun ProfileSetupScreen(
                 .align(Alignment.Center)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally)
+            horizontalAlignment = Alignment.CenterHorizontally, )
         {
+            if (userProfileUiState.isLoading)
+            {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp),
+                    strokeWidth = 4.dp,
+                )
+            }
+
             NormalButton(
                 text = "Next",
-                onClick = onNextProfile,
+                onClick = {
+                    userProfileViewModel?.addUserProfile()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                enabled = name.isNotBlank() && gender.isNotBlank() && age.isNotBlank() && phoneNumber.isNotBlank() && emailAddress.isNotBlank())
+                enabled = isFormNotBlank, )
         }
+
+        LaunchedEffect(key1 = userProfileUiState.addUserProfileStatus)
+        {
+            if (userProfileUiState.addUserProfileStatus)
+            {
+                scope.launch {
+                    Toast.makeText(context, "Profile set up successfully", Toast.LENGTH_SHORT).show()
+                    userProfileViewModel?.resetUserProfileStatus()
+                    navigateToHome()
+                }
+            }
+        }
+
     }
 }

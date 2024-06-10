@@ -44,7 +44,9 @@ fun NormalTextField(
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     singleLine: Boolean = true,
-    trailingIcon: @Composable (() -> Unit)? = null)
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    isError: Boolean = false, )
 {
     OutlinedTextField(
         value = value,
@@ -55,6 +57,7 @@ fun NormalTextField(
             .padding(bottom = 8.dp),
         keyboardOptions = keyboardOptions,
         singleLine = singleLine,
+        leadingIcon = leadingIcon,
         trailingIcon = {
             if (value.isNotEmpty())
             {
@@ -65,7 +68,8 @@ fun NormalTextField(
                         contentDescription = "Clear Text")
                 }
             }
-        }
+        },
+        isError = isError,
     )
 }
 
@@ -89,7 +93,10 @@ fun PasswordField(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default)
+    singleLine: Boolean = true,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    isError: Boolean = false, )
 {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -101,7 +108,8 @@ fun PasswordField(
             .fillMaxWidth()
             .padding(bottom = 8.dp),
         keyboardOptions = keyboardOptions,
-        singleLine = true,
+        singleLine = singleLine,
+        leadingIcon = leadingIcon,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -110,6 +118,7 @@ fun PasswordField(
                     contentDescription = if (passwordVisible) "Hide password" else "Show password"
                 )
             }
-        }
+        },
+        isError = isError,
     )
 }

@@ -1,6 +1,5 @@
 package com.finance.android.walletwise.ui.activity
 
-//Import UI file
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,11 +30,14 @@ import com.finance.android.walletwise.WalletWiseTheme
 fun PreviewWelcomeScreen() {
     WalletWiseTheme {
         WelcomeScreen(
-            onLoginClick  = { /* Do nothing in preview */ },
-            onSignupClick = { /* Do nothing in preview */ }, )
+            onLoginClick  = { /* TODO */ },
+            onSignupClick = { /* TODO */ }, )
     }
 }
 
+/**
+ * Welcome Screen
+ */
 @Composable
 fun WelcomeScreen(
     onLoginClick:  () -> Unit,
@@ -43,13 +45,15 @@ fun WelcomeScreen(
 {
     val configuration = LocalConfiguration.current
     val screenWidth   = configuration.screenWidthDp
-    //val screenHeight  = configuration.screenHeightDp
 
     WalletWiseTheme {
         Box(modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.background))
         {
+            /**
+             * LOGO AND WELCOME TEXT
+             */
             Column(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -72,7 +76,10 @@ fun WelcomeScreen(
                     modifier = Modifier
                         .size((screenWidth*0.6).dp))
             }
-            //Button section
+
+            /**
+             * BUTTON SECTION
+             */
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -80,7 +87,6 @@ fun WelcomeScreen(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally)
             {
-                //Button section
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -100,8 +106,7 @@ fun WelcomeScreen(
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp),
-                            color = MaterialTheme.colorScheme.onPrimary)
-                        //Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null, tint = colorResource(id = R.color.white), modifier = Modifier.size(16.dp).padding(start = 8.dp))
+                            color = MaterialTheme.colorScheme.onPrimary, )
                     }
 
                     //Space between 2 buttons
@@ -134,7 +139,7 @@ fun WelcomeScreen(
                     lineHeight = 18.sp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp)
+                        .padding(top = 16.dp),
                 )
             }
         }
