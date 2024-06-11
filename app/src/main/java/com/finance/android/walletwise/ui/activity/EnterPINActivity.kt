@@ -1,22 +1,21 @@
 package com.finance.android.walletwise.ui.activity
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,21 +26,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.LinearGradientShader
+import androidx.compose.ui.graphics.Shader
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.finance.android.walletwise.R
 import com.finance.android.walletwise.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.*
 import com.finance.android.walletwise.ui.viewmodel.PinViewModel
+import com.finance.android.walletwise.ui.viewmodel.UserProfileViewModel
 
+/**
+ * ENTER PIN SCREEN
+ */
 @Preview(showBackground = true)
 @Composable
 fun PreviewEnterPinScreen()
@@ -56,10 +62,15 @@ fun PreviewEnterPinScreen()
 @Composable
 fun EnterPinScreen(
     pinViewModel: PinViewModel? = null,
+    userProfileViewModel: UserProfileViewModel? = null,
     onNavigateHome: () -> Unit,)
 {
     val pinUiState = pinViewModel?.pinUiState
     var pin by remember { mutableStateOf("") }
+
+    val userProfileUiState = userProfileViewModel?.userProfileUiState
+    userProfileViewModel?.getUserProfile()
+    val firstName = userProfileUiState?.fullName ?: ""
 
     val configuration = LocalConfiguration.current
     val screenHeight  = configuration.screenHeightDp
@@ -82,6 +93,9 @@ fun EnterPinScreen(
                 contentDescription = "Application Logo",)
         }
 
+        /**
+         * GREETING
+         */
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,21 +107,20 @@ fun EnterPinScreen(
             Spacer(
                 modifier = Modifier.height((screenHeight*0.08).dp), )
 
-            Row(
+            Column(
                 modifier = Modifier,
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center, )
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally)
             {
                 Text(
-                    text = "Hi, ",
-                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.tertiary,
+                    text = "Welcome back,",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 )
 
-                Text(
-                    text = "Buddy",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.tertiary,
+                AnimatedGradientText(
+                    text = firstName,
+                    gradient = listOf(Color.Red, Color.Blue), //listOf(Color(0xFFF44336), Color(0xFFFF9800), Color(0xFFFFEB3B), Color(0xFF4CAF50), Color(0xFF2196F3), Color(0xFF9C27B0)),
+                    style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
                 )
             }
         }
@@ -122,11 +135,15 @@ fun EnterPinScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally)
         {
-            //Enter Pin field
+            //Enter Pin field ----------------------------------------------------------------------
             Text(
-                text = "Enter PIN",
-                style = MaterialTheme.typography.labelLarge,
+                text = "Enter Your PIN",
+                style = MaterialTheme.typography.titleMedium
+                    .copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(bottom = 8.dp)
             )
+
+            //PinField -----------------------------------------------------------------------------
             PinField(
                 value = pin,
                 mask = true,
@@ -145,6 +162,8 @@ fun EnterPinScreen(
                     style = MaterialTheme.typography.bodySmall
                 )
             }
+
+            Spacer(modifier = Modifier.height((screenHeight*0.2).dp))
         }
 
         LaunchedEffect(key1 = pinUiState?.isPinVerified)
@@ -158,63 +177,60 @@ fun EnterPinScreen(
     }
 }
 
+/**
+ * ANIMATED TEXT
+ */
 @Preview(showBackground = true)
 @Composable
-fun PreviewNumberBoard()
-{
+fun PreviewAnimatedGradientText(){
     WalletWiseTheme {
-        NumberBoardRow(
-            num = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "0", " "),
-            onNumberClick = {},
+        AnimatedGradientText(
+            text = "Hello, World!",
+            gradient = listOf(Color.Red, Color.Blue)
         )
     }
 }
 
 @Composable
-fun NumberBoardRow(
-    num: List<String>,
-    onNumberClick: (num: String) -> Unit)
+fun AnimatedGradientText(
+    text: String,
+    gradient: List<Color>,
+    style: TextStyle = MaterialTheme.typography.headlineMedium, )
 {
-    val list = (1..9).map { it.toString() }.toMutableList()
-    list.addAll(mutableListOf(" ", "0", " "))
+    //Animation configuration
+    var offset by remember { mutableStateOf(0f) }
+    val transition = rememberInfiniteTransition()
+    val animatedOffset by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        contentPadding = PaddingValues(
-            start = 12.dp,
-            top = 16.dp,
-            end = 12.dp,
-            bottom = 16.dp
-        ),
-        content = {
-            itemsIndexed(items = list) { index, item ->
-                NumberButton(
-                    modifier = Modifier,
-                    number = item,
-                    onClick = { onNumberClick(it) })
+    //Update offset for animation
+    LaunchedEffect(key1 = animatedOffset) {
+        offset = animatedOffset
+    }
+
+    //Gradient brush
+    val brush = remember(offset) {
+        object : ShaderBrush() {
+            override fun createShader(size: Size): Shader {
+                return LinearGradientShader(
+                    colors = gradient,
+                    from = Offset(size.width * offset, 0f),
+                    to = Offset(size.width * offset + size.width, 0f),
+                    tileMode = TileMode.Mirror
+                )
             }
         }
-    )
-}
-
-@Composable
-private fun NumberButton(
-    modifier: Modifier = Modifier,
-    number: String = "1",
-    onClick: (number: String) -> Unit = {},
-) {
-    Button(
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-        onClick = {
-            onClick(number)
-        },
-        modifier = modifier
-            .padding(8.dp),)
-    {
-        Text(
-            text = number,
-            color = Color.Black,
-            style = MaterialTheme.typography.headlineSmall,
-        )
     }
+
+    //Text with gradient brush
+    Text(
+        text = text,
+        style = style.copy(brush = brush),
+    )
 }

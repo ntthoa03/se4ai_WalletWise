@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -157,7 +158,20 @@ fun WalletWiseNavHost(
             )
         }
         //SetupPinScreen
-        composable(route = pinSetupScreen.route)
+        composable(
+            route = pinSetupScreen.route,
+            enterTransition = {
+                return@composable fadeIn(tween(300))
+            },
+            exitTransition = {
+                return@composable fadeOut(tween(300))
+            },
+            popEnterTransition = {
+                return@composable slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300)
+                )
+            }, )
         {
             SetupPinScreen(
                 onNavigateHome = {
@@ -170,13 +184,24 @@ fun WalletWiseNavHost(
          * HOME ====================================================================================
          */
         //EnterPinScreen
-        composable(route = pinVerificationScreen.route)
+        composable(
+            route = pinVerificationScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                scaleOut(tween(500))
+            }, )
         {
             EnterPinScreen(
                 onNavigateHome = {
                     navController.navigateSingleTopTo(homeScreen.route)
                 },
                 pinViewModel = pinViewModel,
+                userProfileViewModel = userProfileViewModel,
             )
         }
         //HomeScreen
