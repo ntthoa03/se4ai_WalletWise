@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,9 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.finance.android.walletwise.R
 import com.finance.android.walletwise.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.NormalButton
-import com.finance.android.walletwise.ui.fragment.NormalSwitch
 import com.finance.android.walletwise.ui.fragment.PinField
-import com.finance.android.walletwise.ui.viewmodel.PinViewModel
+import com.finance.android.walletwise.ui.viewmodel.user.PinViewModel
 
 @Preview(showBackground = true)
 @Composable

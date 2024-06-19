@@ -18,9 +18,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.finance.android.walletwise.model.UserPreferences
 import com.finance.android.walletwise.ui.activity.*
-import com.finance.android.walletwise.ui.viewmodel.AuthenticationViewModel
-import com.finance.android.walletwise.ui.viewmodel.PinViewModel
-import com.finance.android.walletwise.ui.viewmodel.UserProfileViewModel
+import com.finance.android.walletwise.ui.viewmodel.user.AuthenticationViewModel
+import com.finance.android.walletwise.ui.viewmodel.user.PinViewModel
+import com.finance.android.walletwise.ui.viewmodel.user.UserProfileViewModel
 
 //Control application navigation with NavHost
 @Composable

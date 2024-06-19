@@ -11,7 +11,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -42,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import com.finance.android.walletwise.R
 import com.finance.android.walletwise.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.*
-import com.finance.android.walletwise.ui.viewmodel.PinViewModel
-import com.finance.android.walletwise.ui.viewmodel.UserProfileViewModel
+import com.finance.android.walletwise.ui.viewmodel.user.PinViewModel
+import com.finance.android.walletwise.ui.viewmodel.user.UserProfileViewModel
 
 /**
  * ENTER PIN SCREEN

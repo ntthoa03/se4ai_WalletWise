@@ -32,8 +32,8 @@ import com.finance.android.walletwise.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.DropDownMenu
 import com.finance.android.walletwise.ui.fragment.NormalButton
 import com.finance.android.walletwise.ui.fragment.NormalTextField
-import com.finance.android.walletwise.ui.viewmodel.UserProfileUiState
-import com.finance.android.walletwise.ui.viewmodel.UserProfileViewModel
+import com.finance.android.walletwise.ui.viewmodel.user.UserProfileUiState
+import com.finance.android.walletwise.ui.viewmodel.user.UserProfileViewModel
 import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
