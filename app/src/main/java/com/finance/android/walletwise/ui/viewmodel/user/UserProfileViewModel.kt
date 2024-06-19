@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.finance.android.walletwise.model.UserProfile
+import com.finance.android.walletwise.model.user.UserProfile
 import com.finance.android.walletwise.repository.UserProfileRepository
 import com.google.firebase.auth.FirebaseUser
 

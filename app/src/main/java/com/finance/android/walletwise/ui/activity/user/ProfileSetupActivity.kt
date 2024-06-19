@@ -1,4 +1,4 @@
-package com.finance.android.walletwise.ui.activity
+package com.finance.android.walletwise.ui.activity.user
 
 import android.widget.Toast
 import androidx.compose.foundation.Image

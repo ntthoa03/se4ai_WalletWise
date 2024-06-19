@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.finance.android.walletwise.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.BalanceSection
 import com.finance.android.walletwise.ui.fragment.DetailedBalanceSection
-import com.finance.android.walletwise.ui.fragment.FAButton
 import com.finance.android.walletwise.ui.fragment.NormalIconLabelButton
-import com.finance.android.walletwise.ui.fragment.WalletWiseBottomBar
-import com.finance.android.walletwise.ui.fragment.WalletWiseTopAppBar
 import com.finance.android.walletwise.R
 import com.finance.android.walletwise.ui.fragment.NormalIconButton
 
@@ -43,79 +37,24 @@ import com.finance.android.walletwise.ui.fragment.NormalIconButton
 fun HomeScreenPreview()
 {
     WalletWiseTheme {
-        HomeScreen()
+        HomeScreen(
+            balance = "1000000",
+            currency = "USD",
+            incomeAmount = "500000",
+            outcomeAmount = "100000",
+            innerPadding = PaddingValues(0.dp)
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen()
-{
-    //val scaffoldState = rememberScaffoldState()
-    var selectedTab by remember { mutableStateOf(0) }
-
-    Scaffold(
-        //scaffoldState = scaffoldState,
-        //TOP APP BAR
-        topBar = {
-            WalletWiseTopAppBar(
-                title = "WalletWise",
-                useIconForTitle = true,
-                showNavigationButton = true,
-                showActionButton = true,
-                onNavigationClick = { /*TODO*/ },
-                onActionClick = { /*TODO*/ },
-            )
-        },
-        //BOTTOM BAR
-        bottomBar = {
-            WalletWiseBottomBar(
-                selectedTab = 0,
-                onTabSelected = { /*TODO*/ },
-                onHomeClick = { /*TODO*/ },
-                onExpenseListClick = { /*TODO*/ },
-                onCategoryListClick = { /*TODO*/ },
-                onSettingsClick = {/* TODO */},
-            )
-        },
-        //FAB
-        floatingActionButton = {
-            FAButton(
-                onClick = { /*TODO*/ },
-                icon = Icons.Default.Add,
-                contentDescription = "Add Transaction"
-            )
-        },
-        floatingActionButtonPosition = FabPosition.End,
-        //isFloatingActionButtonDocked = true
-    )
-    { innerPadding ->
-        HomeScreenContent(
-            balance = "1000000",
-            currency = "VND",
-            incomeAmount = "100000",
-            outcomeAmount = "50000",
-            innerPadding = innerPadding
-        )
-        /*when (selectedTab) {
-            0 -> HomeScreen(innerPadding)
-            1 -> ExpenseListScreen(innerPadding)
-            2 -> CategoryListScreen(innerPadding)
-            3 -> SettingsScreen(innerPadding)
-        }*/
-    }
-}
-
-/**
- * Home screen content
- */
-@Composable
-fun HomeScreenContent(
-    balance: String,
-    currency: String,
-    incomeAmount: String,
-    outcomeAmount: String,
-    innerPadding: PaddingValues)
+fun HomeScreen(
+    balance: String = "",
+    currency: String = "VND",
+    incomeAmount: String = "",
+    outcomeAmount: String = "",
+    innerPadding: PaddingValues = PaddingValues(0.dp), )
 {
     LazyColumn(
         modifier = Modifier
@@ -140,7 +79,7 @@ fun HomeScreenContent(
                 outcomeAmount = outcomeAmount,
                 onIncomeClick = {},
                 onOutcomeClick = {},
-                )
+            )
         }
         //QUICK ACCESS BAR
         item {
@@ -148,21 +87,21 @@ fun HomeScreenContent(
         }
         //Divider
         item {
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp)
                     .padding(top = 16.dp, bottom = 16.dp),
-                color = Color.Gray.copy(alpha = 0.5f),
-                thickness = 1.dp)
+                thickness = 1.dp, color = Color.Gray.copy(alpha = 0.5f)
+            )
         }
         //QUICK VIEW OF TRANSACTIONS LIST
-          //item {
-          //    ExpenseList(expenses = listOf("Coffee - $5", "Groceries - $30", "Dinner - $20")) // Replace with actual data
-          //}
+        //item {
+        //    ExpenseList(expenses = listOf("Coffee - $5", "Groceries - $30", "Dinner - $20")) // Replace with actual data
+        //}
         //QUICK VIEW OF CATEGORIES LIST
-          //item {
-          //    CategoryList(categories = listOf("Food", "Entertainment", "Transport")) // Replace with actual data
-          //}
+        //item {
+        //    CategoryList(categories = listOf("Food", "Entertainment", "Transport")) // Replace with actual data
+        //}
     }
 }
 

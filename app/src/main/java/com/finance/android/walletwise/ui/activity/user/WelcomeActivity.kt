@@ -1,4 +1,4 @@
-package com.finance.android.walletwise.ui.activity
+package com.finance.android.walletwise.ui.activity.user
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

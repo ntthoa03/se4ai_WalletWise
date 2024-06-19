@@ -2,6 +2,7 @@ package com.finance.android.walletwise
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleOut
@@ -10,14 +11,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.navigation.NavHostController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.finance.android.walletwise.model.UserPreferences
+import com.finance.android.walletwise.model.user.UserPreferences
 import com.finance.android.walletwise.ui.activity.*
+import com.finance.android.walletwise.ui.activity.user.EnterPinScreen
+import com.finance.android.walletwise.ui.activity.user.LoginScreen
+import com.finance.android.walletwise.ui.activity.user.ProfileSetupScreen
+import com.finance.android.walletwise.ui.activity.user.SetupPinScreen
+import com.finance.android.walletwise.ui.activity.user.SignupScreen
+import com.finance.android.walletwise.ui.activity.user.WelcomeScreen
 import com.finance.android.walletwise.ui.viewmodel.user.AuthenticationViewModel
 import com.finance.android.walletwise.ui.viewmodel.user.PinViewModel
 import com.finance.android.walletwise.ui.viewmodel.user.UserProfileViewModel
@@ -181,7 +189,7 @@ fun WalletWiseNavHost(
             )
         }
         /**
-         * HOME ====================================================================================
+         * Enter PIN ===============================================================================
          */
         //EnterPinScreen
         composable(
@@ -198,21 +206,74 @@ fun WalletWiseNavHost(
         {
             EnterPinScreen(
                 onNavigateHome = {
-                    navController.navigateSingleTopTo(homeScreen.route)
+                    navController.navigate(homeScreen.route){
+                        popUpTo(pinVerificationScreen.route) { inclusive = true }
+                    }
                 },
                 pinViewModel = pinViewModel,
                 userProfileViewModel = userProfileViewModel,
             )
         }
+        /**
+         * MAIN APP SCREENS ========================================================================
+         */
         //HomeScreen
-        composable(route = homeScreen.route)
+        composable(
+            route = homeScreen.route,
+            enterTransition = { expandIn(
+                animationSpec = tween(300),
+                expandFrom =  Alignment.CenterStart, )
+            },
+            exitTransition = { fadeOut(
+                animationSpec = tween(300), )
+            }, )
         {
-            HomeScreen()
+            HomeScreen("10")
         }
+        //ExpenseListScreen
+        composable(
+            route = expenseListScreen.route,
+            enterTransition = { expandIn(
+                animationSpec = tween(300),
+                expandFrom =  Alignment.CenterStart, )
+            },
+            exitTransition = { fadeOut(
+                animationSpec = tween(300), )
+            }, )
+        {
+            HomeScreen("21")
+        }
+        //CategoryListScreen
+        composable(
+            route = categoryListScreen.route,
+            enterTransition = { expandIn(
+                animationSpec = tween(300),
+                expandFrom =  Alignment.CenterStart, )
+            },
+            exitTransition = { fadeOut(
+                animationSpec = tween(300), )
+            }, )
+        {
+            HomeScreen("10")
+        }
+        //SettingScreen
+        composable(
+            route = settingScreen.route,
+            enterTransition = { expandIn(
+                animationSpec = tween(300),
+                expandFrom =  Alignment.CenterStart, )
+            },
+            exitTransition = { fadeOut(
+                animationSpec = tween(300), )
+            }, )
+        {
+            HomeScreen("22")
+        }
+
     }
 }
 
-//Navigation
+//Navigation FUNCTION
 fun NavHostController.navigateSingleTopTo(route: String) = this.navigate(route)
 {
     //Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items

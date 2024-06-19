@@ -1,16 +1,10 @@
 package com.finance.android.walletwise.repository
 
-import com.finance.android.walletwise.model.UserProfile
+import com.finance.android.walletwise.model.user.UserProfile
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 
 const val USERPROFILE_COLLECTION_REF = "UserProfiles"
 

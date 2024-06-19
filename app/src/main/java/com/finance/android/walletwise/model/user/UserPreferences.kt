@@ -1,4 +1,4 @@
-package com.finance.android.walletwise.model
+package com.finance.android.walletwise.model.user
 
 import android.content.Context
 
