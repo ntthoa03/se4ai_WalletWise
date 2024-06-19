@@ -139,20 +139,6 @@ fun WalletWiseApp(
                     }
                 }
             },
-            /**
-             * FLOATING ACTION BUTTON (FAB)
-             */
-            floatingActionButton = {
-                if (isFABVisible)
-                {
-                    FAButton(
-                        onClick = { /*TODO*/ },
-                        icon = Icons.Default.Add,
-                        contentDescription = "Add Transaction"
-                    )
-                }
-            },
-            floatingActionButtonPosition = FabPosition.End,
         )
         { innerPadding ->
             WalletWiseNavHost(

@@ -228,7 +228,13 @@ fun WalletWiseNavHost(
                 animationSpec = tween(300), )
             }, )
         {
-            HomeScreen("10")
+            HomeScreen("10",
+                onClickAddManual = {},
+                onClickAddOCR = {},
+                onClickAddText = {},
+                quickAccessOnAnalysisClick = {},
+                quickAccessOnAIChatClick = {},
+                quickAccessOnRemindClick = {}, )
         }
         //ExpenseListScreen
         composable(
