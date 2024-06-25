@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,9 +39,11 @@ import com.finance.android.walletwise.ui.fragment.BalanceSection
 import com.finance.android.walletwise.ui.fragment.DetailedBalanceSection
 import com.finance.android.walletwise.ui.fragment.NormalIconLabelButton
 import com.finance.android.walletwise.R
+import com.finance.android.walletwise.ui.AppViewModelProvider
 import com.finance.android.walletwise.ui.fragment.FAButton
 import com.finance.android.walletwise.ui.fragment.FAButtonCircle
 import com.finance.android.walletwise.ui.fragment.NormalIconButton
+import com.finance.android.walletwise.ui.viewmodel.TransactionsScreenViewModel
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -75,12 +78,25 @@ fun HomeScreen(
     onClickAddText: () -> Unit = {},
     quickAccessOnAnalysisClick:() -> Unit = {},
     quickAccessOnAIChatClick: () -> Unit = {},
-    quickAccessOnRemindClick: () -> Unit = {},)
-{
+    quickAccessOnRemindClick: () -> Unit = {},
+    viewModel: TransactionsScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
+){
     val expandedState = remember { mutableStateOf(false) }
     var rotationAngle by remember { mutableStateOf(0f) }
     val numExpandedFab = 3
     val angleIncrement = 45f
+
+    val transactionScreenUiState by viewModel.transactionsScreenUiState.collectAsState()
+    var totalIncome = 0.0
+    var totalExpense = 0.0
+
+    transactionScreenUiState.transactionList.forEach { transaction ->
+        if (transaction.type == "Expense") {
+            totalExpense += transaction.amount
+        } else {
+            totalIncome += transaction.amount
+        }
+    }
 
     LaunchedEffect(expandedState.value) {
         if (expandedState.value)
@@ -161,7 +177,7 @@ fun HomeScreen(
             item {
                 BalanceSection(
                     title = "Balance",
-                    balance = balance,
+                    balance = (totalIncome-totalExpense).toString(),
                     currency = currency,
                     showTitle = false,
                     showCurrencyBackground = true,
@@ -170,8 +186,8 @@ fun HomeScreen(
             //DETAILED BALANCE SECTION BOXES
             item {
                 DetailedBalanceSection(
-                    incomeAmount = incomeAmount,
-                    outcomeAmount = outcomeAmount,
+                    incomeAmount = totalIncome.toString(),
+                    outcomeAmount = totalExpense.toString(),
                     onIncomeClick = {},
                     onOutcomeClick = {},
                 )

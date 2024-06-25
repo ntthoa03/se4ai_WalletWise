@@ -39,33 +39,8 @@ fun SettingScreenPreview()
 @Composable
 fun SettingScreen() {
 
-    Scaffold(
-        //scaffoldState = scaffoldState,
-        //TOP APP BAR
-        topBar = {
-            WalletWiseTopAppBar(
-                title = "WalletWise",
-                useIconForTitle = true,
-                showNavigationButton = true,
-                showActionButton = true,
-                onNavigationClick = { /*TODO*/ },
-                onActionClick = { /*TODO*/ },
-            )
-        },
-        //BOTTOM BAR
-        bottomBar = {
-            WalletWiseBottomBar(
-                selectedTab = 3,
-                onTabSelected = { /*TODO*/ },
-                onHomeClick = { /*TODO*/ },
-                onExpenseListClick = { /*TODO*/ },
-                onCategoryListClick = { /*TODO*/ },
-                onSettingsClick = {/* TODO */},
-            )
-        }
-    )
-    {
-            innerPadding ->
+    Scaffold()
+    {innerPadding ->
         SettingScreenContent(
             theme = "Light",
             language = "English",
@@ -74,12 +49,6 @@ fun SettingScreen() {
             email = "nguyenvana@gmail.com",
             innerPadding = innerPadding
         )
-        /*when (selectedTab) {
-            0 -> HomeScreen(innerPadding)
-            1 -> ExpenseListScreen(innerPadding)
-            2 -> CategoryListScreen(innerPadding)
-            3 -> SettingsScreen(innerPadding)
-        }*/
     }
 }
 
