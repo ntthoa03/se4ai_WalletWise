@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.finance.android.walletwise.ui.fragment.FAButton
 import com.finance.android.walletwise.ui.fragment.WalletWiseBottomBar
 import com.finance.android.walletwise.ui.fragment.WalletWiseTopAppBar
 
@@ -72,17 +68,11 @@ fun WalletWiseApp(
          */
         val topBarType: Int = when {
             tabNavigationScreens.contains(currentDestination) -> 0 //main Top App Bar
-
             else -> -1
         }
 
         val bottomBarType: Int = when {
             tabNavigationScreens.contains(currentDestination) -> 0 //navigation Bottom App Bar
-
-            else -> -1
-        }
-
-        val fabType: Int = when {
             else -> -1
         }
 
@@ -120,8 +110,8 @@ fun WalletWiseApp(
                                 navController.navigate(
                                     when (index) {
                                         0 -> homeScreen.route
-                                        1 -> expenseListScreen.route
-                                        2 -> categoryListScreen.route
+                                        1 -> transactionsListScreen.route
+                                        2 -> categoriesListScreen.route
                                         3 -> settingScreen.route
                                         else -> homeScreen.route
                                     },

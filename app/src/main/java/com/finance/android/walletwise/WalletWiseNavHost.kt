@@ -6,6 +6,10 @@ import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,8 +20,10 @@ import androidx.navigation.NavHostController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.finance.android.walletwise.model.user.UserPreferences
 import com.finance.android.walletwise.ui.activity.*
 import com.finance.android.walletwise.ui.activity.user.EnterPinScreen
@@ -26,6 +32,9 @@ import com.finance.android.walletwise.ui.activity.user.ProfileSetupScreen
 import com.finance.android.walletwise.ui.activity.user.SetupPinScreen
 import com.finance.android.walletwise.ui.activity.user.SignupScreen
 import com.finance.android.walletwise.ui.activity.user.WelcomeScreen
+import com.finance.android.walletwise.ui.fragment.TransactionAppBar
+import com.finance.android.walletwise.ui.fragment.WalletWiseTopAppBar
+import com.finance.android.walletwise.ui.screen.CategoryListScreen
 import com.finance.android.walletwise.ui.viewmodel.user.AuthenticationViewModel
 import com.finance.android.walletwise.ui.viewmodel.user.PinViewModel
 import com.finance.android.walletwise.ui.viewmodel.user.UserProfileViewModel
@@ -101,7 +110,7 @@ fun WalletWiseNavHost(
                     navController.navigateSingleTopTo(signupScreen.route)
                 },
                 navigateToHome = {
-                    navController.navigateSingleTopTo(homeScreen.route)
+                    navController.navigateSingleTopTo(pinSetupScreen.route)
                 },
                 authenticationViewModel = authenticationViewModel,
             )
@@ -217,7 +226,7 @@ fun WalletWiseNavHost(
         /**
          * MAIN APP SCREENS ========================================================================
          */
-        //HomeScreen
+        //HomeScreen ===============================================================================
         composable(
             route = homeScreen.route,
             enterTransition = { expandIn(
@@ -233,12 +242,14 @@ fun WalletWiseNavHost(
                 onClickAddOCR = {},
                 onClickAddText = {},
                 quickAccessOnAnalysisClick = {},
-                quickAccessOnAIChatClick = {},
+                quickAccessOnAIChatClick = { navController.navigate(chatbotScreen.route) },
                 quickAccessOnRemindClick = {}, )
         }
-        //ExpenseListScreen
+
+        //TransactionScreen ========================================================================
+        //TransactionsListScreen
         composable(
-            route = expenseListScreen.route,
+            route = transactionsListScreen.route,
             enterTransition = { expandIn(
                 animationSpec = tween(300),
                 expandFrom =  Alignment.CenterStart, )
@@ -247,11 +258,29 @@ fun WalletWiseNavHost(
                 animationSpec = tween(300), )
             }, )
         {
-            HomeScreen("21")
+            ListExpenseScreen(navController = navController)
         }
-        //CategoryListScreen
+        //TransactionAddScreen
         composable(
-            route = categoryListScreen.route,
+            route = addTransactionScreen.route, )
+        {
+            ScreeneAddExpense(navigateBack = { navController.popBackStack() })
+        }
+        //TransactionEditScreen
+        composable(
+            route = TransactionEditDestination.routeWithArgs,
+            arguments = listOf(navArgument(TransactionEditDestination.transactionIdArg){ type= NavType.IntType })
+        )
+        {
+            EditScreenExpense(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        //CategoryScreen ===========================================================================
+        //CategoriesListScreen
+        composable(
+            route = categoriesListScreen.route,
             enterTransition = { expandIn(
                 animationSpec = tween(300),
                 expandFrom =  Alignment.CenterStart, )
@@ -260,9 +289,17 @@ fun WalletWiseNavHost(
                 animationSpec = tween(300), )
             }, )
         {
-            HomeScreen("10")
+            CategoryListScreen(
+                onNavigateToAddCategory = { navController.navigate(addCategoryScreen.route) })
         }
-        //SettingScreen
+        //CategoryAddScreen
+        composable(
+            route = addCategoryScreen.route, )
+        {
+            ScreenAddCategory(navigateBack = { navController.popBackStack() })
+        }
+
+        //SettingScreen ============================================================================
         composable(
             route = settingScreen.route,
             enterTransition = { expandIn(
@@ -273,9 +310,21 @@ fun WalletWiseNavHost(
                 animationSpec = tween(300), )
             }, )
         {
-            HomeScreen("22")
+            SettingScreen()
         }
 
+        composable(
+            route = chatbotScreen.route,
+            enterTransition = { expandIn(
+                animationSpec = tween(300),
+                expandFrom =  Alignment.CenterStart, )
+            },
+            exitTransition = { fadeOut(
+                animationSpec = tween(300), )
+            }, )
+        {
+            ChatScreen()
+        }
     }
 }
 

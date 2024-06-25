@@ -1,5 +1,6 @@
 package com.finance.android.walletwise.ui.fragment
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,45 +23,21 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.finance.android.walletwise.R
 import com.finance.android.walletwise.WalletWiseTheme
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewWalletWiseTopAppBar() {
-    WalletWiseTheme {
-        WalletWiseTopAppBar(
-            title = "WalletWise",
-            useIconForTitle = true,
-            showNavigationButton = true,
-            showActionButton = true,
-            onNavigationClick = { /*TODO*/ },
-            onActionClick = { /*TODO*/ },
-        )
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewWalletWiseNavigationBar() {
-    WalletWiseTheme {
-        WalletWiseBottomBar(
-            selectedTab = 1,
-            onTabSelected = { /*TODO*/ },
-            onHomeClick = { /*TODO*/ },
-            onExpenseListClick = { /*TODO*/ },
-            onCategoryListClick = { /*TODO*/ },
-            onSettingsClick = {/* TODO */},
-        )
-    }
-}
-
-//TopAppBar composable =============================================================================
+/**
+ * WalletWiseTopAppBar =============================================================================
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WalletWiseTopAppBar(
@@ -121,7 +98,9 @@ fun WalletWiseTopAppBar(
 }
 
 
-//NavigationAppBar composable ======================================================================
+/**
+ * WalletWiseBottomBar =============================================================================
+ */
 @Composable
 fun WalletWiseBottomBar(
     selectedTab: Int,
@@ -197,30 +176,99 @@ fun WalletWiseBottomBar(
     }
 }
 
-//Test with Top App Bar and Navigation App Bar
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewWalletWiseBottomBar()
-//{
-//    WalletWiseTheme {
-//        Scaffold(
-//            topBar = {
-//                WalletWiseTopAppBar(
-//                    title = "WalletWise",
-//                    useIconForTitle = true,
-//                    showNavigationButton = true,
-//                    showActionButton = true,
-//                    onNavigationClick = { /*TODO*/ },
-//                    onActionClick = { /*TODO*/ }, ) },
-//            bottomBar = {
-//                WalletWiseBottomBar(
-//                    selectedTab = 1,
-//                    onTabSelected = { /*TODO*/ },
-//                    onHomeClick = { /*TODO*/ },
-//                    onExpenseListClick = { /*TODO*/ },
-//                    onCategoryListClick = { /*TODO*/ },
-//                    onSettingsClick = {/* TODO */}, ) },
-//            content = { /* TODO */ }
-//        )
-//    }
-//}
+/**
+ * TransactionAppBar ===============================================================================
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TransactionAppBar(
+    title: String,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
+    topBarState: Boolean
+)  {
+    AnimatedVisibility(visible = topBarState) {
+        TopAppBar(
+            //backgroundColor =Color(colorAppBar),
+            title = { Text(title, fontSize = 18.sp)},
+            modifier = modifier,
+            navigationIcon = {
+                if (canNavigateBack) {
+                    IconButton(onClick = navigateUp) {
+                        Icon(painter = painterResource(id = R.drawable.ic_chat_finance), contentDescription = "Back")
+                    }
+                }
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WalletWiseTopAppBar(
+    title: String,
+    useIconForTitle: Boolean = true,
+    showNavigationButton: Boolean = true,
+    navigationIcon: ImageVector = Icons.Default.Menu,
+    navigationButton: @Composable (() -> Unit)? = null,
+    onNavigationClick: () -> Unit = {},
+    showActionButton: Boolean = true,
+    actionButton: @Composable (() -> Unit)? = null,
+    onActionClick: () -> Unit = {}, )
+{
+    val configuration = LocalConfiguration.current
+    val screenHeight  = configuration.screenHeightDp
+
+    TopAppBar(
+        modifier = Modifier
+            .height((screenHeight*0.06).dp)
+            .fillMaxWidth(),
+        title = {
+            if (useIconForTitle)
+            {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center, )
+                {
+                    Image(
+                        painter = painterResource(id = R.drawable.application_logo),
+                        contentDescription = "WalletWise application text logo", )
+                }
+            }
+            else
+            {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,)
+                {
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterStart),
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                    )
+                }
+            }
+        },
+        navigationIcon = {
+            if (showNavigationButton)
+            {
+                IconButton(onClick = onNavigationClick)
+                {
+                    navigationButton?.invoke() ?: Icon(navigationIcon, contentDescription = navigationIcon.name)
+                }
+            }
+        },
+        actions = {
+            if (showActionButton)
+            {
+                IconButton(onClick = onActionClick)
+                {
+                    actionButton?.invoke() ?: Icon(Icons.Default.Notifications, contentDescription = "Notifications")
+                }
+            }
+        }
+    )
+}

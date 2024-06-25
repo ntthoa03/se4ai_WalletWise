@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
     id("com.google.gms.google-services")
 }
 
@@ -60,8 +62,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.material)
-    implementation(libs.androidx.room.common)
-    implementation(libs.androidx.room.ktx)
+    //Navigation
     implementation(libs.androidx.navigation.compose)
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
@@ -72,7 +73,17 @@ dependencies {
     implementation("androidx.compose.animation:animation:1.4.3")
     // Pin
     implementation("androidx.security:security-crypto:1.0.0")
-
+    //Room
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.generativeai)
+    implementation(libs.androidx.runtime.livedata)
+    kapt(libs.androidx.room.compiler)
+    //Markdown
+    implementation("org.commonmark:commonmark:0.18.2")
+    implementation("androidx.compose.ui:ui:1.1.0")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha01")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,17 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -170,8 +165,7 @@ fun HomeScreen(
                     currency = currency,
                     showTitle = false,
                     showCurrencyBackground = true,
-                    currencyBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                )
+                    currencyBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), )
             }
             //DETAILED BALANCE SECTION BOXES
             item {
@@ -215,18 +209,6 @@ fun HomeScreen(
 /**
  * Quick Access Bar --------------------------------------------------------------------------------
  */
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewQuickAccessBar() {
-//    WalletWiseTheme {
-//        QuickAccessBar(
-//            onAnalysisClick = { /*TODO*/ },
-//            onAIChatClick   = { /*TODO*/ },
-//            onRemindClick   = { /*TODO*/ },
-//        )
-//    }
-//}
-
 @Composable
 fun QuickAccessBar(
     onAnalysisClick: () -> Unit = {},

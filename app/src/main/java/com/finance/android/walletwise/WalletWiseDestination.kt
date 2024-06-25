@@ -52,23 +52,42 @@ object homeScreen : WalletWiseDestination {
     override val route = "homeScreen"
 }
 //EXPENSES LIST SCREEN -----------------------------------------------------------------------------
-object expenseListScreen : WalletWiseDestination {
+object transactionsListScreen : WalletWiseDestination {
     override val icon: ImageVector = Icons.Default.Home
-    override val route = "expenseListScreen"
+    override val route = "transactionsListScreen"
 }
+
+object addTransactionScreen : WalletWiseDestination {
+    override val icon: ImageVector = Icons.Default.Home
+    override val route = "addTransactionScreen"
+}
+
+object editTransactionScreen : WalletWiseDestination {
+    override val icon: ImageVector = Icons.Default.Home
+    override val route = "editTransactionScreen"
+}
+
 //CATEGORIES LIST SCREEN ---------------------------------------------------------------------------
-object categoryListScreen : WalletWiseDestination {
+object categoriesListScreen : WalletWiseDestination {
     override val icon: ImageVector = Icons.Default.Home
-    override val route = "categoryListScreen"
+    override val route = "categoriesListScreen"
 }
+
+object addCategoryScreen : WalletWiseDestination {
+    override val icon: ImageVector = Icons.Default.Home
+    override val route = "addCategoryScreen"
+}
+
 //SETTINGS SCREEN ----------------------------------------------------------------------------------
 object settingScreen : WalletWiseDestination {
     override val icon: ImageVector = Icons.Default.Home
     override val route = "settingScreen"
 }
 
-
-
+object chatbotScreen : WalletWiseDestination {
+    override val icon: ImageVector = Icons.Default.Home
+    override val route = "chatbotScreen"
+}
 
 /**
  * APPLICATION BARS SETTINGS =======================================================================
@@ -84,8 +103,8 @@ val authenticationScreens = mutableListOf(
 
 val tabNavigationScreens = mutableListOf(
     homeScreen.route,
-    expenseListScreen.route,
-    categoryListScreen.route,
+    transactionsListScreen.route,
+    categoriesListScreen.route,
     settingScreen.route,
 ) //Top (main) and Bottom (navigation) bars and FAB
 
