@@ -1,6 +1,5 @@
 package com.finance.android.walletwise.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,27 +13,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.finance.android.walletwise.R
-import com.finance.android.walletwise.addTransactionScreen
 import com.finance.android.walletwise.model.Category.Category
-import com.finance.android.walletwise.model.Transaction.Transaction
 import com.finance.android.walletwise.ui.AppViewModelProvider
-import com.finance.android.walletwise.ui.activity.TransactionCard
 import com.finance.android.walletwise.ui.fragment.BalanceSection
 import com.finance.android.walletwise.ui.fragment.FAButton
-import com.finance.android.walletwise.ui.fragment.WalletWiseBottomBar
-import com.finance.android.walletwise.ui.fragment.WalletWiseTopAppBar
-import com.finance.android.walletwise.ui.viewmodel.CategoryViewModel
+import com.finance.android.walletwise.ui.viewmodel.category.CategoryViewModel
 import com.finance.android.walletwise.util.categoryIconsList
-import kotlinx.coroutines.launch
 
 @Composable
 fun CategoryListScreen(

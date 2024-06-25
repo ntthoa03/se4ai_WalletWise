@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -32,9 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.finance.android.walletwise.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.BalanceSection
 import com.finance.android.walletwise.ui.fragment.DetailedBalanceSection
 import com.finance.android.walletwise.ui.fragment.NormalIconLabelButton
@@ -43,59 +39,36 @@ import com.finance.android.walletwise.ui.AppViewModelProvider
 import com.finance.android.walletwise.ui.fragment.FAButton
 import com.finance.android.walletwise.ui.fragment.FAButtonCircle
 import com.finance.android.walletwise.ui.fragment.NormalIconButton
-import com.finance.android.walletwise.ui.viewmodel.TransactionsScreenViewModel
+import com.finance.android.walletwise.ui.viewmodel.transaction.TransactionsScreenViewModel
 import kotlin.math.cos
 import kotlin.math.sin
 
 /**
  * Home Screen -------------------------------------------------------------------------------------
  */
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview()
-{
-    WalletWiseTheme {
-        HomeScreen(
-            balance = "1000000",
-            currency = "USD",
-            incomeAmount = "500000",
-            outcomeAmount = "100000",
-            innerPadding = PaddingValues(0.dp)
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    balance: String = "",
     currency: String = "VND",
-    incomeAmount: String = "",
-    outcomeAmount: String = "",
-    innerPadding: PaddingValues = PaddingValues(0.dp),
     onClickAddManual: () -> Unit = {},
     onClickAddOCR: () -> Unit = {},
     onClickAddText: () -> Unit = {},
     quickAccessOnAnalysisClick:() -> Unit = {},
     quickAccessOnAIChatClick: () -> Unit = {},
     quickAccessOnRemindClick: () -> Unit = {},
-    viewModel: TransactionsScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
-){
+    viewModel: TransactionsScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory), )
+{
     val expandedState = remember { mutableStateOf(false) }
     var rotationAngle by remember { mutableStateOf(0f) }
     val numExpandedFab = 3
     val angleIncrement = 45f
 
     val transactionScreenUiState by viewModel.transactionsScreenUiState.collectAsState()
-    var totalIncome = 0.0
-    var totalExpense = 0.0
+    var totalIncome by remember { mutableStateOf(0.0) }
+    var totalExpense by remember { mutableStateOf(0.0) }
 
-    transactionScreenUiState.transactionList.forEach { transaction ->
-        if (transaction.type == "Expense") {
-            totalExpense += transaction.amount
-        } else {
-            totalIncome += transaction.amount
-        }
+    LaunchedEffect(transactionScreenUiState.transactionList) {
+        totalIncome = transactionScreenUiState.transactionList.filter { it.type == "Income" }.sumOf { it.amount }
+        totalExpense = transactionScreenUiState.transactionList.filter { it.type == "Expense" }.sumOf { it.amount }
     }
 
     LaunchedEffect(expandedState.value) {
@@ -166,8 +139,7 @@ fun HomeScreen(
             }
         },
         floatingActionButtonPosition = FabPosition.End,
-    )
-    {innerPadding ->
+    ) {innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

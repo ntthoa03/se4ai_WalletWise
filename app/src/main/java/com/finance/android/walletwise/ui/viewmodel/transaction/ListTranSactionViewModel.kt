@@ -1,4 +1,4 @@
-package com.finance.android.walletwise.ui.viewmodel
+package com.finance.android.walletwise.ui.viewmodel.transaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

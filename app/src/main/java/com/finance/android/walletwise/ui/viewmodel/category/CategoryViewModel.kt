@@ -1,4 +1,4 @@
-package com.finance.android.walletwise.ui.viewmodel
+package com.finance.android.walletwise.ui.viewmodel.category
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

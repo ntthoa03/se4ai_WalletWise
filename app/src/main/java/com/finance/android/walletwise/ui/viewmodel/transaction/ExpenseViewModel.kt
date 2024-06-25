@@ -1,4 +1,4 @@
-package com.finance.android.walletwise.ui.viewmodel
+package com.finance.android.walletwise.ui.viewmodel.transaction
 
 import android.util.Log
 import androidx.compose.runtime.getValue

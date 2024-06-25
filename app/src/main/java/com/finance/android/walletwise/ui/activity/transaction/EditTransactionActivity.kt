@@ -1,4 +1,4 @@
-package com.finance.android.walletwise.ui.activity
+package com.finance.android.walletwise.ui.activity.transaction
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,17 +29,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.finance.android.walletwise.WalletWiseDestination
 import com.finance.android.walletwise.model.Transaction.TransactionUiState
 import com.finance.android.walletwise.ui.AppViewModelProvider
-import com.finance.android.walletwise.ui.viewmodel.EditTransactionViewModel
+import com.finance.android.walletwise.ui.viewmodel.transaction.EditTransactionViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.finance.android.walletwise.R
 import com.finance.android.walletwise.ui.fragment.NormalButton
 import com.finance.android.walletwise.ui.fragment.WalletWiseTopAppBar
-import com.finance.android.walletwise.ui.viewmodel.CategoryViewModel
-import com.finance.android.walletwise.ui.viewmodel.ExpenseViewModel
+import com.finance.android.walletwise.ui.viewmodel.category.CategoryViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

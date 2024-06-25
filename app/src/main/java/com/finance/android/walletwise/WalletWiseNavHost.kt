@@ -6,10 +6,6 @@ import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,14 +22,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.finance.android.walletwise.model.user.UserPreferences
 import com.finance.android.walletwise.ui.activity.*
+import com.finance.android.walletwise.ui.activity.category.ScreenAddCategory
+import com.finance.android.walletwise.ui.activity.transaction.EditScreenExpense
+import com.finance.android.walletwise.ui.activity.transaction.ListExpenseScreen
+import com.finance.android.walletwise.ui.activity.transaction.ScreeneAddExpense
+import com.finance.android.walletwise.ui.activity.transaction.TransactionEditDestination
 import com.finance.android.walletwise.ui.activity.user.EnterPinScreen
 import com.finance.android.walletwise.ui.activity.user.LoginScreen
 import com.finance.android.walletwise.ui.activity.user.ProfileSetupScreen
 import com.finance.android.walletwise.ui.activity.user.SetupPinScreen
 import com.finance.android.walletwise.ui.activity.user.SignupScreen
 import com.finance.android.walletwise.ui.activity.user.WelcomeScreen
-import com.finance.android.walletwise.ui.fragment.TransactionAppBar
-import com.finance.android.walletwise.ui.fragment.WalletWiseTopAppBar
 import com.finance.android.walletwise.ui.screen.CategoryListScreen
 import com.finance.android.walletwise.ui.viewmodel.user.AuthenticationViewModel
 import com.finance.android.walletwise.ui.viewmodel.user.PinViewModel
@@ -237,7 +236,7 @@ fun WalletWiseNavHost(
                 animationSpec = tween(300), )
             }, )
         {
-            HomeScreen("10",
+            HomeScreen(
                 onClickAddManual = {},
                 onClickAddOCR = {},
                 onClickAddText = {},

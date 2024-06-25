@@ -5,11 +5,11 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.finance.android.walletwise.ui.viewmodel.ExpenseViewModel
+import com.finance.android.walletwise.ui.viewmodel.transaction.ExpenseViewModel
 import com.finance.android.walletwise.WalletWiseApplication
-import com.finance.android.walletwise.ui.viewmodel.CategoryViewModel
-import com.finance.android.walletwise.ui.viewmodel.EditTransactionViewModel
-import com.finance.android.walletwise.ui.viewmodel.TransactionsScreenViewModel
+import com.finance.android.walletwise.ui.viewmodel.category.CategoryViewModel
+import com.finance.android.walletwise.ui.viewmodel.transaction.EditTransactionViewModel
+import com.finance.android.walletwise.ui.viewmodel.transaction.TransactionsScreenViewModel
 
 
 object AppViewModelProvider{

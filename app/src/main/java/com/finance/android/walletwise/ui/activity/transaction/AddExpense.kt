@@ -1,10 +1,9 @@
-package com.finance.android.walletwise.ui.activity
+package com.finance.android.walletwise.ui.activity.transaction
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.layout.*
@@ -26,9 +25,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.InputChipDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -52,23 +48,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import com.finance.android.walletwise.ui.fragment.NormalTextField
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.finance.android.walletwise.R
-import com.finance.android.walletwise.model.Category.Category
 import com.finance.android.walletwise.model.Category.CategoryUIState
 import com.finance.android.walletwise.ui.fragment.NormalButton
-import com.finance.android.walletwise.ui.viewmodel.ExpenseViewModel
+import com.finance.android.walletwise.ui.viewmodel.transaction.ExpenseViewModel
 import com.finance.android.walletwise.model.Transaction.TransactionUiState
-import com.finance.android.walletwise.model.Transaction.toTransaction
 import com.finance.android.walletwise.ui.AppViewModelProvider
-import com.finance.android.walletwise.ui.viewmodel.CategoryViewModel
-import com.finance.android.walletwise.ui.viewmodel.ChatViewModel
+import com.finance.android.walletwise.ui.activity.MessageItem
+import com.finance.android.walletwise.ui.viewmodel.category.CategoryViewModel
 import com.finance.android.walletwise.ui.viewmodel.TextExtractionViewModel
 
 
@@ -87,7 +79,7 @@ fun ScreeneAddExpense(viewModel: ExpenseViewModel = androidx.lifecycle.viewmodel
 
 @Composable
 fun AddExpenseSreen(transactionUiState: TransactionUiState,
-                    expenseviewModel: ExpenseViewModel= androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
+                    expenseviewModel: ExpenseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
 
                     navigateBack: () -> Unit) {
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -181,7 +173,7 @@ fun AddExpenseSreen(transactionUiState: TransactionUiState,
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TabContent1(transactionUiState: TransactionUiState,
-                expenseViewModel: ExpenseViewModel= androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
+                expenseViewModel: ExpenseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
                 navigateBack: () -> Unit,
                 coroutineScope: CoroutineScope
 ) {
@@ -262,7 +254,7 @@ fun TabContent1(transactionUiState: TransactionUiState,
 
 @Composable
 fun InputChipContent1(transactionUiState: TransactionUiState,
-                      expenseViewModel: ExpenseViewModel= androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
+                      expenseViewModel: ExpenseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
                       categoryViewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
                       navigateBack: () -> Unit,
                       coroutineScope: CoroutineScope
@@ -317,7 +309,7 @@ fun InputChipContent1(transactionUiState: TransactionUiState,
 @Composable
 fun InputChipContent2(
     transactionUiState: TransactionUiState,
-    expenseViewModel: ExpenseViewModel= androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
+    expenseViewModel: ExpenseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
     categoryViewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
     navigateBack: () -> Unit,
     coroutineScope: CoroutineScope)

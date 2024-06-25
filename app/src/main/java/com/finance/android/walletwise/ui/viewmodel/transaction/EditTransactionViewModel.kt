@@ -1,4 +1,4 @@
-package com.finance.android.walletwise.ui.viewmodel
+package com.finance.android.walletwise.ui.viewmodel.transaction
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,7 +11,7 @@ import com.finance.android.walletwise.model.Transaction.TransactionUiState
 import com.finance.android.walletwise.model.Transaction.isValid
 import com.finance.android.walletwise.model.Transaction.toTransaction
 import com.finance.android.walletwise.model.Transaction.toTransactionUiState
-import com.finance.android.walletwise.ui.activity.TransactionEditDestination
+import com.finance.android.walletwise.ui.activity.transaction.TransactionEditDestination
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
