@@ -14,16 +14,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 val defaultExpenseCategoryDtoTypeList = listOf(
-    Category(id = 1, name = "INCOME", amount = 0),
-    Category(id = 2, name = "Food & Drink", amount = 0),
-    Category(id = 3, name = "Education", amount = 0),
-    Category(id = 4, name = "Transportation", amount = 0),
-    Category(id = 5, name = "Sport & Entertainment", amount = 0),
-    Category(id = 6, name = "Shopping", amount = 0),
-    Category(id = 7, name = "House & Utilities", amount = 0),
+    Category(id = 1, name = "Salary", amount = 0),
+    Category(id = 2, name = "Other income", amount = 0),
+    Category(id = 3, name = "Food & Drink", amount = 0),
+    Category(id = 4, name = "Education", amount = 0),
+    Category(id = 5, name = "Transportation", amount = 0),
+    Category(id = 6, name = "Sport & Entertainment", amount = 0),
+    Category(id = 7, name = "Shopping", amount = 0),
+    Category(id = 8, name = "House & Utilities", amount = 0),
 )
 
-@Database(entities = [Transaction::class, Category::class], version = 3, exportSchema = false)
+@Database(entities = [Transaction::class, Category::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
@@ -38,7 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
                 Log.d("Test getDatabase","run getDatabase")
                 Room.databaseBuilder(context,
                     AppDatabase::class.java,
-                    "app_database_v6"
+                    "app_database_v1"
                 )
                     .fallbackToDestructiveMigration()
                     .addCallback(object : RoomDatabase.Callback() {

@@ -66,10 +66,25 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository) : Vi
         return categoryRepository.findCategoryIdByName(name)
     }
 
-    // For getting categories of a specific type (similar to your transaction implementation)
     val expenseCategories: StateFlow<List<Category>> =
         allCategories
-            //.map { categories -> categories.filter { it. == "Expense" } }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = emptyList()
+            )
+
+    val expenseFilterCategories: StateFlow<List<Category>> =
+        allCategories
+            .map { categories -> categories.filter { it.id > 2 } }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = emptyList()
+            )
+    val incomeFilterCategories: StateFlow<List<Category>> =
+        allCategories
+            .map { categories -> categories.filter { it.id < 3 } }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),

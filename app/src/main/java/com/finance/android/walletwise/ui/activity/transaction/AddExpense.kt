@@ -332,7 +332,7 @@ fun InputChipContent2(
             horizontalAlignment = Alignment.Start
         ) {
 
-            CategoryIncomeDropdown(transactionUiState = expenseViewModel.transactionUiState, onValueChange = expenseViewModel::updateUiState)
+            CategoryIncomeDropdown(transactionUiState = expenseViewModel.transactionUiState, categoryUiState = categoryViewModel.categoryUiState, onValueChange = expenseViewModel::updateUiState)
 
 
             datetimepicker(onValueChange=expenseViewModel::updateUiState, transactionUiState = transactionUiState)
@@ -546,7 +546,7 @@ fun CategoryDropdown(
         categoryViewModel.getAllCategories()
     }
 
-    val categoryListState by categoryViewModel.expenseCategories.collectAsState()
+    val categoryListState by categoryViewModel.expenseFilterCategories.collectAsState()
     val selectedCategoryName = categoryListState.find { it.id == transactionUiState.idCategory }?.name ?: "Select a Category"
 
     Column {
@@ -687,43 +687,20 @@ fun datetimepicker(transactionUiState: TransactionUiState, onValueChange: (Trans
 @Composable
 fun CategoryIncomeDropdown(
     transactionUiState: TransactionUiState,
+    categoryUiState: CategoryUIState,
+    categoryViewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AppViewModelProvider.Factory),
     onValueChange: (TransactionUiState) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    val categoryList = listOf("INCOME")
-    val selectedCategoryName = if (transactionUiState.idCategory != null) "INCOME" else "Select a Category"
+    LaunchedEffect(Unit) {
+        categoryViewModel.getAllCategories()
+    }
+
+    val categoryListState by categoryViewModel.incomeFilterCategories.collectAsState()
+    val selectedCategoryName = categoryListState.find { it.id == transactionUiState.idCategory }?.name ?: "Select a Category"
 
     Column {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(16.dp)
-//                .clip(RoundedCornerShape(10.dp))
-//                .background(Color.White)
-//                .border(
-//                    width = 1.5.dp,
-//                    color = Color(0xFFF1F1FA),
-//                    shape = RoundedCornerShape(10.dp)
-//                )
-//        ) {
-//            Text(
-//                text = selectedCategoryName,
-//                modifier = Modifier
-//                    .padding(12.dp)
-//                    .fillMaxWidth(),
-//                color = Color(0xFF91919F)
-//            )
-//            IconButton(
-//                onClick = { expanded = !expanded },
-//                modifier = Modifier.align(Alignment.CenterEnd)
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.ArrowDropDown,
-//                    contentDescription = "Expand category dropdown",
-//                    tint = Color(0xFF91919F)
-//                )
-//            }
         OutlinedTextField(
             value = selectedCategoryName,
             onValueChange = {},
@@ -748,17 +725,17 @@ fun CategoryIncomeDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .background(Color(0xFFFCFCFC))
+                .fillMaxWidth()
+                .background(colorResource(R.color.md_theme_background))
         ) {
-            categoryList.forEach { category ->
+            categoryListState.forEach { category ->
                 DropdownMenuItem(
                     onClick = {
-                        onValueChange(transactionUiState.copy(idCategory = 1)) // Assuming "INCOME" has id 1
+                        onValueChange(transactionUiState.copy(idCategory = category.id))
                         expanded = false
                     },
                     text = {
-                        Text(text = category, color = Color.Black)
+                        Text(text = category.name, color = colorResource(R.color.md_theme_onBackground))
                     }
                 )
             }
