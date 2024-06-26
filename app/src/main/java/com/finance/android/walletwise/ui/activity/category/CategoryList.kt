@@ -89,30 +89,6 @@ fun CategoryList(categoryList: List<Category>, navController: NavController) {
     }
 }
 
-
-@Composable
-fun LinearProgress() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        LinearProgressIndicator(
-            progress = 0.5f,
-            color = Color(0xFF70AA72),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp)
-                .background(Color.Gray.copy(alpha = 0.2f))
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = "15/30 days", fontSize = 12.sp)
-            Text(text = "1,500,000", fontSize = 12.sp)
-            Text(text = "3,000,000", fontSize = 12.sp)
-        }
-    }
-}
-
-
 @Composable
 fun BudgetProgressCard(
     category: Category,

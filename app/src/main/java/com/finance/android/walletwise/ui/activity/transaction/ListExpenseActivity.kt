@@ -108,99 +108,100 @@ fun ListExpenseScreen(
 fun ExpenseList(transactionList: List<Transaction>,navController: NavController) {
     LazyColumn(contentPadding = PaddingValues(bottom = 80.dp)) {
         items(items = transactionList, key = { it.id }) { item ->
-            TransactionCard(transaction=item,navController = navController)
+            TransactionCard(
+                transaction = item,
+                navController = navController)
         }
     }
 }
 
 
 @Composable
-fun TransactionCard(transaction: Transaction,
-                    categoryViewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AppViewModelProvider.Factory),
-                    navController: NavController
-) {
+fun TransactionCard(
+    transaction: Transaction,
+    categoryViewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AppViewModelProvider.Factory),
+    navController: NavController, )
+{
     LaunchedEffect(Unit) {
         categoryViewModel.getAllCategories()
     }
 
     val categoryListState by categoryViewModel.expenseCategories.collectAsState()
-    // Debug log to check category list state
+    //Debug log to check category list state
     Log.d("TransactionCard", "Category List: ${categoryListState.joinToString { it.name }}")
+
     val selectedCategory = categoryListState.find { it.id == transaction.idCategory }
-    // Debug log to check selected category
+    //Debug log to check selected category
     Log.d("TransactionCard", "Selected Category: $selectedCategory")
     val selectedCategoryName = selectedCategory?.name ?: "Name Category"
     val selectedCategoryIcon = selectedCategory?.icon ?: "Icon Category"
 
-
-
-    val formattedDate by remember {
-        derivedStateOf {
-            DateTimeFormatter.ofPattern("MMM dd, yyyy").format(transaction.date)
-        }
-    }
     val formattedTime by remember {
         derivedStateOf {
             DateTimeFormatter.ofPattern("hh:mm").format(transaction.time)
         }
     }
+
     Box(
         modifier = Modifier
             .padding(10.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFFFFF6F0))
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .clickable {
-                if (transaction.type.equals("Expense")) {
+                if (transaction.type.equals("Expense"))
+                {
                     navController.navigate("${TransactionEditDestination.route}/${transaction.id}")
-                } else {
+                }
+                else
+                {
                     navController.navigate("${IncomeTransactionEditDestination.route}/${transaction.id}")
                 }
-            }
+            },
     )
     {
-        if (transaction.type.equals("Expense")) {
-
+        if (transaction.type == "Expense")
+        {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+                verticalAlignment = Alignment.CenterVertically,)
+            {
                 Row(
                     horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                    verticalAlignment = Alignment.CenterVertically)
+                {
                     Box(
                         contentAlignment = Alignment.Center, modifier = Modifier
                             .clip(RoundedCornerShape(15.dp))
                             .size(75.dp)
-                            .padding(5.dp)
-                    ) {
+                            .padding(5.dp))
+                    {
                         Image(
-                            painter = painterResource(
-                                id = categoryIconsList[selectedCategoryIcon] ?: R.drawable.ic_category
-                            ), contentDescription = "Category Icon: $selectedCategoryIcon",
-                            modifier = Modifier.size(40.dp),
-
-                            )
+                            painter = painterResource(id = categoryIconsList[selectedCategoryIcon] ?: R.drawable.ic_category),
+                            contentDescription = "Category Icon: $selectedCategoryIcon",
+                            modifier = Modifier.size(40.dp), )
                     }
                     Spacer(modifier = Modifier.width(5.dp))
-                    Column(modifier = Modifier.padding(10.dp)) {
+
+                    Column(
+                        modifier = Modifier.padding(10.dp), )
+                    {
                         Text(
                             text = selectedCategoryName,
                             fontSize = 18.sp,
-                            color = Color(0xFF292B2D)
-                        )
+                            color = Color(0xFF292B2D), )
+
                         Spacer(modifier = Modifier.height(10.dp))
+
                         Text(
                             text = transaction.description,
                             fontSize = 15.sp,
                             color = Color(0xFF91919F),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            modifier=Modifier.fillMaxWidth(0.75f)
-                        )
+                            modifier=Modifier.fillMaxWidth(0.75f), )
                     }
                 }
                 Column(
@@ -209,9 +210,7 @@ fun TransactionCard(transaction: Transaction,
                 ) {
                     Text(
                         text = transaction.amount.toString(), fontSize = 18.sp,
-                        color =
-                        Color(0xFFFD3C4A)
-
+                        color = Color(0xFFFD3C4A)
                     )
                     Spacer(modifier = Modifier.height(3.dp))
                     Row() {
@@ -219,46 +218,51 @@ fun TransactionCard(transaction: Transaction,
                     }
                 }
             }
-        } else {
+        }
+        else
+        {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+                verticalAlignment = Alignment.CenterVertically,)
+            {
                 Row(
                     horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                    verticalAlignment = Alignment.CenterVertically, )
+                {
                     Box(
                         contentAlignment = Alignment.Center, modifier = Modifier
                             .clip(RoundedCornerShape(15.dp))
                             .size(75.dp)
-                            .padding(5.dp)
-                    ) {
+                            .padding(5.dp), )
+                    {
                         Image(
-                            painter = painterResource(
-                                id = categoryIconsList[selectedCategoryIcon] ?: R.drawable.ic_category
-                            ), contentDescription = "Category Icon: $selectedCategoryIcon",
-                            modifier = Modifier.size(40.dp),
-                        )
+                            painter = painterResource(id = categoryIconsList[selectedCategoryIcon] ?: R.drawable.ic_category),
+                            contentDescription = "Category Icon: $selectedCategoryIcon",
+                            modifier = Modifier.size(40.dp), )
                     }
+
                     Spacer(modifier = Modifier.width(5.dp))
-                    Column(modifier = Modifier.padding(10.dp)) {
+
+                    Column(
+                        modifier = Modifier.padding(10.dp), )
+                    {
                         Text(
                             text = selectedCategoryName,
                             fontSize = 18.sp,
-                            color = Color(0xFF292B2D)
-                        )
+                            color = Color(0xFF292B2D), )
+
                         Spacer(modifier = Modifier.height(10.dp))
+
                         Text(
                             text = transaction.description,
                             fontSize = 15.sp,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                             color = Color(0xFF91919F),
-                            modifier=Modifier.fillMaxWidth(0.75f)
+                            modifier = Modifier.fillMaxWidth(0.75f)
                         )
                     }
                 }
@@ -268,13 +272,14 @@ fun TransactionCard(transaction: Transaction,
                 ) {
                     Text(
                         text = transaction.amount.toString(), fontSize = 18.sp,
-                        color =
-                        Color(0xFF00A86B)
-
+                        color = Color(0xFF00A86B)
                     )
                     Spacer(modifier = Modifier.height(3.dp))
                     Row() {
-                        Text(text = formattedTime, fontSize = 13.sp, color = Color(0xFF91919F))
+                        Text(
+                            text = formattedTime,
+                            fontSize = 13.sp,
+                            color = Color(0xFF91919F), )
                     }
                 }
 
@@ -286,10 +291,11 @@ fun TransactionCard(transaction: Transaction,
 
 @Composable
 fun selecttime(items: List<String>, modifier: Modifier= Modifier,
-               activeHighlightColor: Color = Color(0xFFFCEED4),
-               activeTextColor: Color = Color(0xFFFCAC12),
-               inactiveTextColor: Color = Color(0xFF91919F),
-               initialSelectedItemIndex: Int=0): Int{
+               activeHighlightColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+               activeTextColor: Color = MaterialTheme.colorScheme.primary,
+               inactiveTextColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+               initialSelectedItemIndex: Int=0): Int
+{
     var selecteditemindex by remember {
         mutableStateOf(initialSelectedItemIndex)
     }
@@ -316,9 +322,9 @@ fun selecttime(items: List<String>, modifier: Modifier= Modifier,
 fun rangeselectoritem(
     item: String,
     isSelected: Boolean = false,
-    activeHighlightColor: Color = Color(0xFFFCEED4),
-    activeTextColor: Color = Color(0xFFFCAC12),
-    inactiveTextColor: Color = Color(0xFFE3E5E5),
+    activeHighlightColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+    activeTextColor: Color = MaterialTheme.colorScheme.primary,
+    inactiveTextColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
     onItemClick: () ->Unit, )
 {
     Row(horizontalArrangement = Arrangement.SpaceAround,

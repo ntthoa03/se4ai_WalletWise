@@ -341,7 +341,9 @@ fun WalletWiseNavHost(
                 animationSpec = tween(300), )
             }, )
         {
-            ChatScreen()
+            ChatScreen(
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }
