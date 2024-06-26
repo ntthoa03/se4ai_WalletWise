@@ -238,12 +238,10 @@ fun WalletWiseNavHost(
             }, )
         {
             HomeScreen(
-                onClickAddManual = {},
-                onClickAddOCR = {},
-                onClickAddText = {},
+                onNavigateToAddTransaction = { navController.navigate(addTransactionScreen.route) },
                 quickAccessOnAnalysisClick = {},
-                quickAccessOnAIChatClick = { navController.navigate(chatbotScreen.route) },
-                quickAccessOnRemindClick = {}, )
+                quickAccessOnAIChatClick   = { navController.navigate(chatbotScreen.route) },
+                quickAccessOnRemindClick   = {}, )
         }
 
         //TransactionScreen ========================================================================

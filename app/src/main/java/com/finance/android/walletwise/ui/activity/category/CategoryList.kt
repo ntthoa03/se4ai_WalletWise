@@ -24,12 +24,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.finance.android.walletwise.R
+import com.finance.android.walletwise.addCategoryScreen
+import com.finance.android.walletwise.addTransactionScreen
 import com.finance.android.walletwise.model.Category.Category
 
 import com.finance.android.walletwise.ui.AppViewModelProvider
 import com.finance.android.walletwise.ui.activity.DetailCategoryDestination
 
 import com.finance.android.walletwise.ui.fragment.BalanceSection
+import com.finance.android.walletwise.ui.fragment.FAButton
 
 import com.finance.android.walletwise.ui.viewmodel.category.CategoryViewModel
 import com.finance.android.walletwise.util.categoryIconsList
@@ -38,91 +41,42 @@ import kotlinx.coroutines.launch
 fun CategoryListScreen(
     viewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory), // Inject your repository here
     navController: NavController
-//    navigateToAddCategory: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.getAllCategories()
     }
     val totalBudget by viewModel.totalBudget.collectAsState()
-
     val categoryListState by viewModel.expenseCategories.collectAsState()
 
-//    Scaffold(
-//        topBar = {
-//            WalletWiseTopAppBar(
-//                title = "WalletWise",
-//                useIconForTitle = true,
-//                showNavigationButton = true,
-//                showActionButton = true,
-//                onNavigationClick = { /* TODO: Handle navigation click */ },
-//                onActionClick = { /* TODO: Handle action click */ },
-//            )
-//        },
-//        bottomBar = {
-//            WalletWiseBottomBar(
-//                selectedTab = 0,
-//                onTabSelected = { /* TODO: Handle tab selection */ },
-//                onHomeClick = { /* TODO: Handle home click */ },
-//                onExpenseListClick = { /* TODO: Handle expense list click */ },
-//                onCategoryListClick = { /* TODO: Handle category list click */ },
-//                onSettingsClick = { /* TODO: Handle settings click */ },
-//            )
-//        },
-//        floatingActionButton = {
-//            FAButton(
-//                onClick = navigateToAddCategory,
-//                icon = Icons.Default.Add,
-//                contentDescription = "Add Transaction"
-//            )
-//        },
-//        floatingActionButtonPosition = FabPosition.End,
-//        content = { innerPadding ->
-//            Surface(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(innerPadding)
-//                    .background(Color(0xFFF5F5F5))
-//            ) {
-//                Column(
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                    modifier = Modifier.padding(16.dp)
-//                ) {
-//                    BalanceSection(
-//                        title = "REMAINING BUDGET",
-//                        balance = "1500000",
-//                        currency = "VND"
-//                    )
-//                    LinearProgress()
-//                    Spacer(modifier = Modifier.height(16.dp))
-//                    CategoryList(categoryListState)
-//
-////
-////
-//                }
-//            }
-//        }
-//    )
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-//            .padding(innerPadding)
-            .background(Color(0xFFF5F5F5))
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            BalanceSection(
-                title = "TOTAL BUDGET",
-                balance =totalBudget.toString(),
-                currency = "VND"
+    Scaffold(
+        floatingActionButton = {
+            FAButton(
+                onClick = { navController.navigate(addCategoryScreen.route) },
+                buttonColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier,
+                icon = Icons.Default.Add,
+                contentDescription = "Add Category"
             )
-//            LinearProgress()
-            Spacer(modifier = Modifier.height(16.dp))
-            CategoryList(categoryListState, navController = navController)
-
-//
-//
+        },
+        floatingActionButtonPosition = FabPosition.End,
+    ) {innerPadding ->
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding), )
+        {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(16.dp)
+            ) {
+                BalanceSection(
+                    title = "TOTAL BUDGET",
+                    balance = totalBudget.toString(),
+                    currency = "VND"
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                CategoryList(categoryListState, navController = navController)
+            }
         }
     }
 }
@@ -160,17 +114,18 @@ fun LinearProgress() {
 
 
 @Composable
-fun BudgetProgressCard(category: Category, navController: NavController ){
-
+fun BudgetProgressCard(
+    category: Category,
+    navController: NavController, )
+{
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {navController.navigate("${DetailCategoryDestination.route}/${category.id}")}
+            .clickable { navController.navigate("${DetailCategoryDestination.route}/${category.id}") }
             .padding(vertical = 6.dp),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(), // Use CardDefaults.cardElevation() instead of specific value
-    ) {
-        // Add padding inside the Card
+        elevation = CardDefaults.cardElevation(),)
+    {
         Box(modifier = Modifier
             .padding(16.dp)) {
             BudgetProgress(category)
@@ -179,7 +134,8 @@ fun BudgetProgressCard(category: Category, navController: NavController ){
 }
 
 @Composable
-fun BudgetProgress(category: Category ) {
+fun BudgetProgress(category: Category )
+{
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -201,17 +157,9 @@ fun BudgetProgress(category: Category ) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = category.name, modifier = Modifier.weight(20f), fontSize = 14.sp)
-                Text(text = "30%", fontSize = 12.sp)
+                Text(text = category.amount.toString(), fontSize = 12.sp)
             }
             Spacer(modifier = Modifier.height(4.dp))
-            LinearProgressIndicator(
-                progress = 30/ 100f,
-                color = Color(0xFF7C99EE),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .background(Color.Gray.copy(alpha = 0.2f))
-            )
         }
     }
 }

@@ -37,6 +37,7 @@ import com.finance.android.walletwise.ui.fragment.BalanceSection
 import com.finance.android.walletwise.ui.fragment.DetailedBalanceSection
 import com.finance.android.walletwise.ui.fragment.NormalIconLabelButton
 import com.finance.android.walletwise.R
+import com.finance.android.walletwise.addTransactionScreen
 import com.finance.android.walletwise.ui.AppViewModelProvider
 import com.finance.android.walletwise.ui.fragment.FAButton
 import com.finance.android.walletwise.ui.fragment.FAButtonCircle
@@ -51,89 +52,25 @@ import kotlin.math.sin
 @Composable
 fun HomeScreen(
     currency: String = "VND",
-    onClickAddManual: () -> Unit = {},
-    onClickAddOCR: () -> Unit = {},
-    onClickAddText: () -> Unit = {},
+    onNavigateToAddTransaction: () -> Unit = {},
     quickAccessOnAnalysisClick:() -> Unit = {},
     quickAccessOnAIChatClick: () -> Unit = {},
     quickAccessOnRemindClick: () -> Unit = {},
     viewModel: TransactionsScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory), )
 {
-    val expandedState = remember { mutableStateOf(false) }
-    var rotationAngle by remember { mutableStateOf(0f) }
-    val numExpandedFab = 3
-    val angleIncrement = 45f
-
     val transactionScreenUiState by viewModel.transactionsScreenUiState.collectAsState()
     val totalIncome by viewModel.totalIncome.collectAsState()
     val totalExpense by viewModel.totalExpense.collectAsState()
 
-    LaunchedEffect(expandedState.value) {
-        if (expandedState.value)
-        {
-            rotationAngle = 135f // Starting angle for the first expanded FAB
-        }
-        else
-        {
-            rotationAngle = 0f  // Reset the angle when collapsing
-        }
-    }
-
     Scaffold(
         floatingActionButton = {
             FAButton(
-                onClick = { expandedState.value = !expandedState.value },
-                buttonColor = if (!expandedState.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                onClick = { onNavigateToAddTransaction() },
+                buttonColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier,
-                icon = if (!expandedState.value) Icons.Default.Add else Icons.Default.Close,
+                icon = Icons.Default.Add,
                 contentDescription = "Add Transaction"
             )
-
-            if (expandedState.value)
-            {
-                for (i in 0 until numExpandedFab)
-                {
-                    val fabAngle = rotationAngle + (i + 1) * angleIncrement
-                    val fabIndex = i // Create a separate variable for the index
-
-                    Box(
-                        modifier = Modifier
-                            .offset(
-                                x = animateFloatAsState(
-                                        targetValue = 100 * sin(Math.toRadians(fabAngle.toDouble())).toFloat(),
-                                        animationSpec = tween(durationMillis = 300), label = "", ).value.dp,
-                                y = animateFloatAsState(
-                                        targetValue = 100 * cos(Math.toRadians(fabAngle.toDouble())).toFloat(),
-                                        animationSpec = tween(durationMillis = 300), label = "", ).value.dp
-                            ),
-                    )
-                    {
-                        when (fabIndex)
-                        {
-                            0 -> FAButtonCircle( // Manual
-                                onClick = { onClickAddManual() },
-                                icon = Icons.Default.Edit,
-                                buttonColor = MaterialTheme.colorScheme.primary,
-                                contentDescription = "Manual",
-                                modifier = Modifier.rotate(fabAngle), )
-
-                            1 -> FAButtonCircle( // OCR
-                                onClick = { onClickAddOCR() },
-                                iconResId = R.drawable.ic_receipt_scan,
-                                buttonColor = MaterialTheme.colorScheme.primary,
-                                contentDescription = "Manual",
-                                modifier = Modifier.rotate(fabAngle), )
-
-                            2 -> FAButtonCircle( // Text
-                                onClick = { onClickAddText() },
-                                iconResId = R.drawable.ic_transaction_text,
-                                buttonColor = MaterialTheme.colorScheme.primary,
-                                contentDescription = "Manual",
-                                modifier = Modifier.rotate(fabAngle), )
-                        }
-                    }
-                }
-            }
         },
         floatingActionButtonPosition = FabPosition.End,
     ) {innerPadding ->
@@ -230,7 +167,6 @@ fun QuickAccessBar(
             text = "Analysis",
             onClick = onAnalysisClick
         )
-
         //AI Chat Button (Icon Only)
         NormalIconButton(
             contentDescription = "AI Chat",
