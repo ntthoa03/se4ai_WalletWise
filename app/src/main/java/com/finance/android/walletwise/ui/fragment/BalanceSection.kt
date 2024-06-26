@@ -41,21 +41,6 @@ import java.util.Locale
 /**
  * BALANCE SECTION
  */
-@Preview(showBackground = true)
-@Composable
-fun PreviewBalanceSection() {
-    WalletWiseTheme {
-        BalanceSection(
-            title = "Remaining Budget",
-            balance = "1000000",
-            currency = "VND",
-            showTitle = true,
-            showCurrencyBackground = true,
-            currencyBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-        )
-    }
-}
-
 @Composable
 fun BalanceSection(
     title: String,

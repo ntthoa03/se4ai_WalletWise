@@ -29,6 +29,7 @@ class ExpenseViewModel(private val transactionRepository: TransactionRepository)
             val transaction = transactionUiState.toTransaction()
             Log.d("Transaction", "Saving transaction: $transaction")
             try {
+
                 transactionRepository.addTransaction(transaction)
                 Log.d("Transaction", "Transaction saved successfully.")
             } catch (e: Exception) {

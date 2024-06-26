@@ -1,9 +1,11 @@
 package com.finance.android.walletwise.ui.activity
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,13 +65,8 @@ fun HomeScreen(
     val angleIncrement = 45f
 
     val transactionScreenUiState by viewModel.transactionsScreenUiState.collectAsState()
-    var totalIncome by remember { mutableStateOf(0.0) }
-    var totalExpense by remember { mutableStateOf(0.0) }
-
-    LaunchedEffect(transactionScreenUiState.transactionList) {
-        totalIncome = transactionScreenUiState.transactionList.filter { it.type == "Income" }.sumOf { it.amount }
-        totalExpense = transactionScreenUiState.transactionList.filter { it.type == "Expense" }.sumOf { it.amount }
-    }
+    val totalIncome by viewModel.totalIncome.collectAsState()
+    val totalExpense by viewModel.totalExpense.collectAsState()
 
     LaunchedEffect(expandedState.value) {
         if (expandedState.value)
@@ -147,21 +144,10 @@ fun HomeScreen(
         {
             //BALANCE SECTION
             item {
-                BalanceSection(
-                    title = "Balance",
-                    balance = (totalIncome-totalExpense).toString(),
+                BalanceCard(
                     currency = currency,
-                    showTitle = false,
-                    showCurrencyBackground = true,
-                    currencyBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), )
-            }
-            //DETAILED BALANCE SECTION BOXES
-            item {
-                DetailedBalanceSection(
-                    incomeAmount = totalIncome.toString(),
-                    outcomeAmount = totalExpense.toString(),
-                    onIncomeClick = {},
-                    onOutcomeClick = {},
+                    totalIncome = totalIncome,
+                    totalExpense = totalExpense,
                 )
             }
             //QUICK ACCESS BAR
@@ -193,6 +179,35 @@ fun HomeScreen(
         }
     }
 }
+
+@Composable
+fun BalanceCard(
+    modifier: Modifier = Modifier,
+    currency: String = "",
+    totalIncome: Double,
+    totalExpense: Double, )
+{
+    Log.d("BalanceCard", "totalIncome: $totalIncome, totalExpense: $totalExpense")
+    Column(
+        modifier = modifier,
+    ) {
+        BalanceSection(
+            title = "Balance",
+            balance = (totalIncome-totalExpense).toInt().toString(),
+            currency = currency,
+            showTitle = false,
+            showCurrencyBackground = true,
+            currencyBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), )
+
+        DetailedBalanceSection(
+            incomeAmount = totalIncome.toInt().toString(),
+            outcomeAmount = totalExpense.toInt().toString(),
+            onIncomeClick = {},
+            onOutcomeClick = {},
+        )
+    }
+}
+
 
 /**
  * Quick Access Bar --------------------------------------------------------------------------------

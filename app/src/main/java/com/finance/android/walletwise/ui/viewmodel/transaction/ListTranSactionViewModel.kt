@@ -1,5 +1,6 @@
 package com.finance.android.walletwise.ui.viewmodel.transaction
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finance.android.walletwise.model.Transaction.TransactionRepository
@@ -8,6 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import com.finance.android.walletwise.model.Transaction.Transaction
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -100,4 +103,23 @@ class TransactionsScreenViewModel(transactionRepository: TransactionRepository):
                 initialValue = TransactionsScreenUiStateYear()
             )
     data class TransactionsScreenUiStateYear(val transactionList: List<Transaction> = listOf())
+
+    private val _totalIncome = MutableStateFlow(0.0)
+    val totalIncome: StateFlow<Double> = _totalIncome
+
+    private val _totalExpense = MutableStateFlow(0.0)
+    val totalExpense: StateFlow<Double> = _totalExpense
+
+    init {
+        viewModelScope.launch {
+            transactionsScreenUiState.collect { uiState ->
+                val income = uiState.transactionList.filter { it.type == "Income" }.sumOf { it.amount }
+                val expense = uiState.transactionList.filter { it.type == "Expense" }.sumOf { it.amount }
+                Log.d("Home", "totalIncome: $income")
+                Log.d("Home", "totalOutcome: $expense")
+                _totalIncome.value = income
+                _totalExpense.value = expense
+            }
+        }
+    }
 }

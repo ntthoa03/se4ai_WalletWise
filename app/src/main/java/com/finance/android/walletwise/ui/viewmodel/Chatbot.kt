@@ -26,16 +26,20 @@ class ChatViewModel : ViewModel() {
             topP = 0.95f
             maxOutputTokens = 8192
             responseMimeType = "text/plain"
-        }
+        },
+        systemInstruction = content { text("You are a virtual assistant designed to provide financial information. Your job is to offer resources on budgeting, setting savings goals, and general financial planning. Ensure that your tone is friendly and encouraging. Start by asking if the user is seeking financial information, and suggest a few topics to guide the conversation, including budgeting tips, saving goals, or connecting with a financial advisor.") },
     )
 
-    fun sendMessage(userMessage: String) {
+    fun sendMessage(userMessage: String)
+    {
         val newMessages = _messages.value.orEmpty() + Message(userMessage, true)
         _messages.value = newMessages
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO)
+        {
             val chatHistory = listOf(
-                content("user") {
+                content("user")
+                {
                     text(userMessage)
                 }
             )

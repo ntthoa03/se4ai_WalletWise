@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Send
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.finance.android.walletwise.ui.fragment.WalletWiseTopAppBar
 import org.commonmark.node.*
 import org.commonmark.parser.Parser
 
@@ -73,8 +75,6 @@ fun parseMarkdownToAnnotatedString(markdown: String): AnnotatedString {
             val end = builder.length
             builder.addStyle(SpanStyle(fontFamily = FontFamily.Monospace), start, end)
         }
-
-        // Add other visitors as needed (e.g., Emphasis, Code, etc.)
     })
 
     return builder.toAnnotatedString()
@@ -82,17 +82,23 @@ fun parseMarkdownToAnnotatedString(markdown: String): AnnotatedString {
 
 @Preview
 @Composable
-fun ChatScreen() {
-
+fun ChatScreen(
+  onBackClick: () -> Unit = {}, )
+{
     val viewModel: ChatViewModel = viewModel()
     val messages by viewModel.messages.observeAsState(listOf())
     var input by remember { mutableStateOf(TextFieldValue("")) }
 
     Scaffold(
         topBar = {
-            ChatBotTopAppBar(
-                title = "Hello",
-                )
+            WalletWiseTopAppBar(
+                title = "Financial Chatbot",
+                useIconForTitle = false,
+                showNavigationButton = true,
+                navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
+                onNavigationClick = onBackClick,
+                showActionButton = false,
+            )
         },
         content = { paddingValues ->
             Column(

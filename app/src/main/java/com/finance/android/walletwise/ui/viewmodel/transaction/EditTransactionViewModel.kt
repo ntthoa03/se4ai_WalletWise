@@ -14,6 +14,7 @@ import com.finance.android.walletwise.model.Transaction.toTransactionUiState
 import com.finance.android.walletwise.ui.activity.transaction.TransactionEditDestination
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class EditTransactionViewModel(
@@ -28,10 +29,12 @@ class EditTransactionViewModel(
 
     init {
         viewModelScope.launch {
-            transactionUiState = transactionRepository.getTransactionStream(transactionId)
+            transactionRepository.getTransactionStream(transactionId)
                 .filterNotNull()
-                .first()
-                .toTransactionUiState(actionEnabled = true)
+                .firstOrNull()
+                ?.let {
+                    transactionUiState = it.toTransactionUiState(actionEnabled = true)
+                }
         }
     }
 

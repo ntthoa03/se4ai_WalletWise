@@ -20,43 +20,6 @@ class UserProfileRepository
     private val userProfileRef: CollectionReference =
         Firebase.firestore.collection(USERPROFILE_COLLECTION_REF)
 
-    /*
-    fun getUserProfiles(
-        userId: String, ): Flow<Resource<List<UserProfile>>> = callbackFlow {
-
-        var snapshotListener: ListenerRegistration? = null
-
-        try
-        {
-            snapshotListener = userProfileRef
-                .whereEqualTo("userId", userId)
-                .addSnapshotListener { snapshot, error ->
-                    val response =
-                        if (snapshot != null)
-                        {
-                            val userProfiles = snapshot.toObjects(UserProfile::class.java)
-                            Resource.Success(data = userProfiles)
-                        }
-                        else
-                        {
-                            Resource.Error(throwable = error?.cause)
-                        }
-                    trySend(response)
-                }
-
-        }
-        catch (error: Exception)
-        {
-            trySend(Resource.Error(throwable = error?.cause))
-            error.printStackTrace()
-        }
-
-        awaitClose {
-            snapshotListener?.remove()
-        }
-    }
-    */
-
     /**
      * Get user profile
      */

@@ -24,6 +24,7 @@ import com.finance.android.walletwise.model.user.UserPreferences
 import com.finance.android.walletwise.ui.activity.*
 import com.finance.android.walletwise.ui.activity.category.ScreenAddCategory
 import com.finance.android.walletwise.ui.activity.transaction.EditScreenExpense
+import com.finance.android.walletwise.ui.activity.transaction.IncomeTransactionEditDestination
 import com.finance.android.walletwise.ui.activity.transaction.ListExpenseScreen
 import com.finance.android.walletwise.ui.activity.transaction.ScreeneAddExpense
 import com.finance.android.walletwise.ui.activity.transaction.TransactionEditDestination
@@ -263,12 +264,22 @@ fun WalletWiseNavHost(
         composable(
             route = addTransactionScreen.route, )
         {
-            ScreeneAddExpense(navigateBack = { navController.popBackStack() })
+            ScreeneAddExpense(navigateBack = { navController.popBackStack() },navController=navController)
         }
         //TransactionEditScreen
         composable(
             route = TransactionEditDestination.routeWithArgs,
             arguments = listOf(navArgument(TransactionEditDestination.transactionIdArg){ type= NavType.IntType })
+        )
+        {
+            EditScreenExpense(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+        //IncomeEditScreen
+        composable(
+            route = IncomeTransactionEditDestination.routeWithArgs,
+            arguments = listOf(navArgument(IncomeTransactionEditDestination.transactionIdArg){ type= NavType.IntType })
         )
         {
             EditScreenExpense(

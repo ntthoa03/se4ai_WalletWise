@@ -34,17 +34,7 @@ import com.finance.android.walletwise.util.categoriesList
 import com.finance.android.walletwise.util.categoryIconsList
 import kotlinx.coroutines.launch
 
-//@Preview(showBackground = true)
-//@Composable
-//fun AddCategoryScreenPreview() {
-//    WalletWiseTheme {
-//        AddCategoryScreen(
-//            text = "Repeat this budget category",
-//            isChecked = true,
-//            onCheckedChange = {}
-//        )
-//    }
-//}
+
 @Composable
 fun ScreenAddCategory(
     viewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AppViewModelProvider.Factory),

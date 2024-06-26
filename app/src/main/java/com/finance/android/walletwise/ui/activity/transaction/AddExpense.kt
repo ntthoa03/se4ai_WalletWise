@@ -53,6 +53,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.finance.android.walletwise.ui.fragment.NormalTextField
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.finance.android.walletwise.R
 import com.finance.android.walletwise.model.Category.CategoryUIState
 import com.finance.android.walletwise.ui.fragment.NormalButton
@@ -62,6 +63,7 @@ import com.finance.android.walletwise.ui.AppViewModelProvider
 import com.finance.android.walletwise.ui.activity.MessageItem
 import com.finance.android.walletwise.ui.viewmodel.category.CategoryViewModel
 import com.finance.android.walletwise.ui.viewmodel.TextExtractionViewModel
+import com.finance.android.walletwise.ui.viewmodel.transaction.TransactionsScreenViewModel
 
 
 import kotlinx.coroutines.CoroutineScope
@@ -73,15 +75,17 @@ import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun ScreeneAddExpense(viewModel: ExpenseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory), navigateBack: () -> Unit){
-    AddExpenseSreen(transactionUiState = viewModel.transactionUiState,navigateBack=navigateBack)
+fun ScreeneAddExpense(viewModel: ExpenseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
+                      navigateBack: () -> Unit,
+                      navController: NavController){
+    AddExpenseSreen(transactionUiState = viewModel.transactionUiState,navigateBack=navigateBack,navController=navController)
 }
 
 @Composable
 fun AddExpenseSreen(transactionUiState: TransactionUiState,
                     expenseviewModel: ExpenseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
-
-                    navigateBack: () -> Unit) {
+                    navigateBack: () -> Unit,
+                    navController: NavController) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
 
@@ -164,7 +168,7 @@ fun AddExpenseSreen(transactionUiState: TransactionUiState,
             when (selectedTabIndex) {
                 0 -> TabContent1(transactionUiState = expenseviewModel.transactionUiState,navigateBack=navigateBack, coroutineScope = coroutineScope)
                 1 -> TabContent2()
-                2 -> TabContent3(transactionUiState = expenseviewModel.transactionUiState,navigateBack=navigateBack, coroutineScope = coroutineScope)
+                2 -> TabContent3(transactionUiState = expenseviewModel.transactionUiState,navController=navController, coroutineScope = coroutineScope)
             }
         }
     }
@@ -411,9 +415,11 @@ fun TabContent3(
     transactionUiState: TransactionUiState,
     expenseViewModel: ExpenseViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AppViewModelProvider.Factory),
     categoryViewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AppViewModelProvider.Factory),
-    navigateBack: () -> Unit,
+    navController: NavController,
+    viewModel: TransactionsScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory= AppViewModelProvider.Factory),
     coroutineScope: CoroutineScope
 ) {
+    val transactionScreenUiState by viewModel.transactionsScreenUiState.collectAsState()
     val viewModel: TextExtractionViewModel = viewModel()
     var input by remember { mutableStateOf(TextFieldValue("")) }
     val messages by viewModel.messages.observeAsState(listOf())
@@ -486,12 +492,20 @@ fun TabContent3(
                                     expenseViewModel.updateUiState(updatedTransactionUiState)
                                     Log.d("test transactionUiState", "update transactionUiState $updatedTransactionUiState")
 
-                                    coroutineScope.launch {
-                                        expenseViewModel.saveTransactionExpense()
-                                        Log.d("SaveTransaction", "Transaction saved successfully")
-                                        navigateBack()
-                                        Log.d("Navigation", "Navigated back successfully")
-                                    }
+                                    expenseViewModel.saveTransactionExpense()
+                                    Log.d("SaveTransaction", "Transaction saved successfully")
+
+                                    navController.navigate("${TransactionEditDestination.route}/${updatedTransactionUiState.id}")
+                                    Log.d("Navigation", "Navigated back successfully")
+
+//                                    coroutineScope.launch {
+//                                        expenseViewModel.saveTransactionExpense()
+//                                        Log.d("SaveTransaction", "Transaction saved successfully")
+//                                        navController.navigate("${TransactionEditDestination.route}/${expenseViewModel.transactionUiState.id}")
+////                                        navigateBack()
+//
+//                                        Log.d("Navigation", "Navigated back successfully")
+//                                    }
                                 } else {
                                     Log.e("TransactionError", "Invalid category ID: $categoryId")
                                 }
