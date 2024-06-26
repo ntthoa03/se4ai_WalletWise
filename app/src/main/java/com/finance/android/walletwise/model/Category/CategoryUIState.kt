@@ -19,5 +19,5 @@ fun Category.toCategoryUIState(actionEnabled: Boolean=false): CategoryUIState {
 }
 
 fun CategoryUIState.isValid(): Boolean {
-    return name.toString().isNotBlank()
+    return id.toString().isNotBlank()
 }

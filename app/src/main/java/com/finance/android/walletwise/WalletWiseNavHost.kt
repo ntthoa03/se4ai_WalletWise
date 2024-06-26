@@ -289,13 +289,23 @@ fun WalletWiseNavHost(
             }, )
         {
             CategoryListScreen(
-                onNavigateToAddCategory = { navController.navigate(addCategoryScreen.route) })
+                navController = navController)
         }
         //CategoryAddScreen
         composable(
             route = addCategoryScreen.route, )
         {
             ScreenAddCategory(navigateBack = { navController.popBackStack() })
+        }
+        //CategoryEditScreen
+        composable(
+            route = DetailCategoryDestination.routeWithArgs,
+            arguments = listOf(navArgument(DetailCategoryDestination.categoryIdArg){ type= NavType.IntType })
+        )
+        {
+            DetailCategoryScreen(
+                navigateBack = { navController.popBackStack() }
+            )
         }
 
         //SettingScreen ============================================================================

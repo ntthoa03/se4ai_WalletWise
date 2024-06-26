@@ -36,6 +36,16 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository) : Vi
     private val _allCategories = MutableStateFlow<List<Category>>(emptyList())
     val allCategories: StateFlow<List<Category>> = _allCategories.asStateFlow()
 
+    private val _totalBudget = MutableStateFlow(0)
+    val totalBudget: StateFlow<Int> = _totalBudget.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            allCategories.collect { categories ->
+                _totalBudget.value = categories.sumOf { it.amount.toInt() ?: 0 }
+            }
+        }
+    }
     fun updateUiState(newCategoryUIState: CategoryUIState) {
         _categoryUiState.value = newCategoryUIState.copy(actionEnabled = newCategoryUIState.isValid())
     }

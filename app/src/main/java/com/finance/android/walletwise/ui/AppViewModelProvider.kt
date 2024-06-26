@@ -9,6 +9,7 @@ import com.finance.android.walletwise.ui.viewmodel.transaction.ExpenseViewModel
 import com.finance.android.walletwise.WalletWiseApplication
 import com.finance.android.walletwise.ui.viewmodel.category.CategoryViewModel
 import com.finance.android.walletwise.ui.viewmodel.transaction.EditTransactionViewModel
+import com.finance.android.walletwise.ui.viewmodel.category.EditCategoryViewModel
 import com.finance.android.walletwise.ui.viewmodel.transaction.TransactionsScreenViewModel
 
 
@@ -34,6 +35,12 @@ object AppViewModelProvider{
             EditTransactionViewModel(
                 this.createSavedStateHandle(),
                 transactionApplication().container.transactionRepository
+            )
+        }
+        initializer {
+            EditCategoryViewModel(
+                this.createSavedStateHandle(),
+                transactionApplication().container.categoryRepository
             )
         }
 
