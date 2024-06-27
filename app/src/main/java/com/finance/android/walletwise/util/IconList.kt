@@ -7,15 +7,15 @@ val categoriesList = listOf("Bank", "Coffee", "Donate", "Education", "Food&Drink
     "Money", "Party", "Saving", "Self_Development", "Shopping", "Sport", "Transportation", "TV")
 
 val categoryIconsList = mapOf(
-    "Bank" to R.drawable.category_icon_laundry,
-    "Coffee" to R.drawable.category_icon_laundry,
-    "Donate" to R.drawable.category_icon_laundry,
-    "Education" to R.drawable.category_icon_laundry,
+    "Bank" to R.drawable.category_icon_bank,
+    "Coffee" to R.drawable.category_icon_coffee,
+    "Donate" to R.drawable.category_icon_donate,
+    "Education" to R.drawable.category_icon_education,
     "Food&Drink" to R.drawable.category_icon_food___drink,
-    "Fuel" to R.drawable.category_icon_laundry,
-    "Gift" to R.drawable.category_icon_laundry,
-    "Health" to R.drawable.category_icon_laundry,
-    "Home" to R.drawable.category_icon_laundry,
+    "Fuel" to R.drawable.category_icon_fuel,
+    "Gift" to R.drawable.category_icon_gift,
+    "Health" to R.drawable.category_icon_health,
+    "Home" to R.drawable.category_icon_home,
     "Laundry" to R.drawable.category_icon_laundry,
     "Liquor" to R.drawable.category_icon_liquor,
     "Maintenance" to R.drawable.category_icon_maintenance,

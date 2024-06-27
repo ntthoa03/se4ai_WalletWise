@@ -51,7 +51,6 @@ fun AddCategoryScreen(
     viewModel: CategoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AppViewModelProvider.Factory),
     navigateBack: () -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -89,13 +88,6 @@ fun AddCategoryScreen(
         BudgetTextField(categoryUIState = viewModel.categoryUiState, onValueChange = viewModel::updateUiState)
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        NormalSwitch(
-            text = "Repeat this budget category",
-            isChecked = isChecked,
-            onCheckedChange = { isChecked = it },
-            modifier = Modifier.fillMaxWidth()
-        )
 
         Spacer(modifier = Modifier.height(32.dp))
 

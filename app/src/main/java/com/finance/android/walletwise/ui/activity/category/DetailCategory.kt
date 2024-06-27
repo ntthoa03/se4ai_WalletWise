@@ -97,7 +97,6 @@ fun BudgetDetailScreen(
     navigateBack: () -> Unit,
     categoryUIState: CategoryUIState
 ) {
-    var isChecked by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     Column(
@@ -171,14 +170,6 @@ fun BudgetDetailScreen(
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                NormalSwitch(
-                    text = "Repeat this budget category",
-                    isChecked = isChecked,
-                    onCheckedChange = { isChecked = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
                 Spacer(modifier = Modifier.height(32.dp))
 
                 NormalButton(
